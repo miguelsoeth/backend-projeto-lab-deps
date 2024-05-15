@@ -1,0 +1,15 @@
+/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Application/bin/Debug/net8.0/Application.deps.json
+/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Application/bin/Debug/net8.0/Application.dll
+/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Application/bin/Debug/net8.0/Application.pdb
+/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Application/bin/Debug/net8.0/Domain.dll
+/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Application/bin/Debug/net8.0/Domain.pdb
+/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Application/obj/Debug/net8.0/Application.csproj.AssemblyReference.cache
+/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Application/obj/Debug/net8.0/Application.GeneratedMSBuildEditorConfig.editorconfig
+/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Application/obj/Debug/net8.0/Application.AssemblyInfoInputs.cache
+/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Application/obj/Debug/net8.0/Application.AssemblyInfo.cs
+/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Application/obj/Debug/net8.0/Application.csproj.CoreCompileInputs.cache
+/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Application/obj/Debug/net8.0/Application.csproj.CopyComplete
+/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Application/obj/Debug/net8.0/Application.dll
+/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Application/obj/Debug/net8.0/refint/Application.dll
+/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Application/obj/Debug/net8.0/Application.pdb
+/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Application/obj/Debug/net8.0/ref/Application.dll
