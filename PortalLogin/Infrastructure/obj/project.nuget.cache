@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "iiyioyA2H2AWkJOHL2m+2J6eQN3W9nESNNlPhpt6XaSFhXTQRC7TcuNzz56V/gYv0c04so7vwysK06ge58xLIg==",
+  "dgSpecHash": "NKHEWcBFz2grB5jOWu3W+xWrhwTk+KxbG+ADQjvxvTdqC1Dvt525t5xhABtTbI/1b2/2k6ayuT1MpaXGOU4JiA==",
   "success": true,
-  "projectFilePath": "/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Infrastructure/Infrastructure.csproj",
+  "projectFilePath": "/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/Infrastructure/Infrastructure.csproj",
   "expectedPackageFiles": [
     "/home/leonardo/.nuget/packages/azure.core/1.35.0/azure.core.1.35.0.nupkg.sha512",
     "/home/leonardo/.nuget/packages/azure.identity/1.10.3/azure.identity.1.10.3.nupkg.sha512",

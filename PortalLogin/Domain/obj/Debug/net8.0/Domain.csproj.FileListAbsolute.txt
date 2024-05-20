@@ -9,3 +9,15 @@
 /home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Domain/obj/Debug/net8.0/refint/Domain.dll
 /home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Domain/obj/Debug/net8.0/Domain.pdb
 /home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Domain/obj/Debug/net8.0/ref/Domain.dll
+/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/Domain/bin/Debug/net8.0/Domain.deps.json
+/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/Domain/bin/Debug/net8.0/Domain.dll
+/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/Domain/bin/Debug/net8.0/Domain.pdb
+/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/Domain/obj/Debug/net8.0/Domain.GeneratedMSBuildEditorConfig.editorconfig
+/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/Domain/obj/Debug/net8.0/Domain.AssemblyInfoInputs.cache
+/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/Domain/obj/Debug/net8.0/Domain.AssemblyInfo.cs
+/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/Domain/obj/Debug/net8.0/Domain.csproj.CoreCompileInputs.cache
+/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/Domain/obj/Debug/net8.0/Domain.sourcelink.json
+/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/Domain/obj/Debug/net8.0/Domain.dll
+/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/Domain/obj/Debug/net8.0/refint/Domain.dll
+/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/Domain/obj/Debug/net8.0/Domain.pdb
+/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/Domain/obj/Debug/net8.0/ref/Domain.dll

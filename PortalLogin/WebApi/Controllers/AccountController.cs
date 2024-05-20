@@ -1,8 +1,11 @@
 using Application.Contract;
 using Application.Dtos;
+using Domain.Entities;
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApi.Controllers;
 [Route("api/[controller]")]
@@ -10,12 +13,13 @@ namespace WebApi.Controllers;
 public class AccountController : ControllerBase
 {
     private readonly IUser _user;
-    private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly AppDbContext _appDbContext;
 
-    public AccountController(IUser user, RoleManager<IdentityRole> roleManager)
+
+    public AccountController(IUser user, AppDbContext appDbContext)
     {
         _user = user;
-        _roleManager = roleManager;
+        _appDbContext = appDbContext;
     }
 
     [HttpPost("login")]
@@ -26,6 +30,7 @@ public class AccountController : ControllerBase
     }
     
     [HttpPost("register")] 
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<LoginResponse>> RegisterUser(RegisterUserDto registerUser)
     {
         var result = await _user.RegisterUserAsync(registerUser);

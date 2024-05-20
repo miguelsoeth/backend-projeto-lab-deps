@@ -4643,11 +4643,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/WebApi/WebApi.csproj",
+      "projectUniqueName": "/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/WebApi/WebApi.csproj",
       "projectName": "WebApi",
-      "projectPath": "/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/WebApi/WebApi.csproj",
+      "projectPath": "/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/WebApi/WebApi.csproj",
       "packagesPath": "/home/leonardo/.nuget/packages/",
-      "outputPath": "/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/WebApi/obj/",
+      "outputPath": "/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/WebApi/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/leonardo/.nuget/NuGet/NuGet.Config"
@@ -4662,11 +4662,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Application/Application.csproj": {
-              "projectPath": "/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Application/Application.csproj"
+            "/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/Application/Application.csproj": {
+              "projectPath": "/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/Application/Application.csproj"
             },
-            "/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Infrastructure/Infrastructure.csproj": {
-              "projectPath": "/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Infrastructure/Infrastructure.csproj"
+            "/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/Infrastructure/Infrastructure.csproj": {
+              "projectPath": "/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/Infrastructure/Infrastructure.csproj"
             }
           }
         }

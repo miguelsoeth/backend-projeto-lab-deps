@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "B0cGfQhfLoEbGQy1GqLeJ+YDZo9qXr8heFl8S2f0kvQOXd9Gk97hlvNlPMPFKhfRyOUrTJmZCSwsBHy8Td/UXQ==",
+  "dgSpecHash": "34Qv3ng17o8uSLeQIKCOGdy7u3PslL++azVfiEQd00wK4gb4IcFkpo3OAayRVWaAMI6vPwAiICkbaDiMAwjcYg==",
   "success": true,
-  "projectFilePath": "/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Application/Application.csproj",
+  "projectFilePath": "/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/Application/Application.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

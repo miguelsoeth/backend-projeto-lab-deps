@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "T3rZj0tlfrWdGFLctpj4IlMBfi9tJNqUcrxeOUYoL3W2xQ6ZqO6CPBXqf51BCjN28hAKV8uvwo/yBfPGRzXFOg==",
+  "dgSpecHash": "qP9rddchKlOjX53Rd88LpuaN9IUs7yLzqoUU2Uy8CSMi/5cUDi36TrgArosrBcH4ZhHGEJ6TfXlQnEJHEN4Meg==",
   "success": true,
-  "projectFilePath": "/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/WebApi/WebApi.csproj",
+  "projectFilePath": "/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/WebApi/WebApi.csproj",
   "expectedPackageFiles": [
     "/home/leonardo/.nuget/packages/azure.core/1.35.0/azure.core.1.35.0.nupkg.sha512",
     "/home/leonardo/.nuget/packages/azure.identity/1.10.3/azure.identity.1.10.3.nupkg.sha512",

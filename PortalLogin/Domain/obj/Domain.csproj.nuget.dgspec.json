@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Domain/Domain.csproj": {}
+    "/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/Domain/Domain.csproj": {}
   },
   "projects": {
-    "/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Domain/Domain.csproj": {
+    "/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/Domain/Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Domain/Domain.csproj",
+        "projectUniqueName": "/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/Domain/Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Domain/Domain.csproj",
+        "projectPath": "/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/Domain/Domain.csproj",
         "packagesPath": "/home/leonardo/.nuget/packages/",
-        "outputPath": "/home/leonardo/Documentos/Projetos/NewProject/backend/PortalLogin/Domain/obj/",
+        "outputPath": "/home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/Domain/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/leonardo/.nuget/NuGet/NuGet.Config"

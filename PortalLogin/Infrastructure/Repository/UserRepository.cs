@@ -56,23 +56,35 @@ public class UserRepository : IUser
             return new LoginResponse(false, "Invalid credentials");
     }
 
-    private string GenerateJwtToken(ApplicationUser user)
+    public string GenerateJwtToken(ApplicationUser user)
     {
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:key"]!));
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-        var userClaims = new[]
+
+        var claims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Name,user.Name!),
-            new Claim(ClaimTypes.Email, user.Email!)
+            new Claim(ClaimTypes.Name, user.Name),
+            new Claim(ClaimTypes.Email, user.Email)
         };
+
+        // Adiciona as roles como claims
+        if (user.Roles != null)
+        {
+            foreach (var role in user.Roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+        }
+
         var token = new JwtSecurityToken(
             issuer: _configuration["Jwt:Issuer"],
-            audience: _configuration["Jwt: Audience"],
-            claims: userClaims,
-            expires: DateTime.Now.AddDays(5),
+            audience: _configuration["Jwt:Audience"],
+            claims: claims,
+            expires: DateTime.Now.AddDays(7),
             signingCredentials: credentials
-            );
+        );
+
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

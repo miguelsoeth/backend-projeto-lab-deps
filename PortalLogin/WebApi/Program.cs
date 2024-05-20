@@ -5,7 +5,6 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.InfrastructureServices(builder.Configuration);
 builder.Services.AddAuthorization();
@@ -34,9 +33,10 @@ builder.Services.AddSwaggerGen(c =>
             new List<string>()
         }
     });
+
+    // Especifique o endpoint do Swagger JSON
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
 });
-
-
 
 var app = builder.Build();
 
@@ -44,11 +44,19 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API v1");
+    });
 }
 
 app.UseHttpsRedirection();
-app.UseAuthorization();
+app.UseRouting();
 app.UseAuthentication();
-app.MapControllers();
+app.UseAuthorization();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
+
 app.Run();
