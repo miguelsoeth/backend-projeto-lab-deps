@@ -9,7 +9,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.InfrastructureServices(builder.Configuration);
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerGen(c =>
 {
     // Definir a definição de segurança para o Swagger

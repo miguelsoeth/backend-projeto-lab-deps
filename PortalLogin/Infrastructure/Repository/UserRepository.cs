@@ -6,7 +6,10 @@ using Application.Contract;
 using Application.Dtos;
 using Domain.Entities;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -16,11 +19,14 @@ public class UserRepository : IUser
 {
     private readonly AppDbContext _appDbContext;
     private readonly IConfiguration _configuration;
+    private readonly IHttpContextAccessor _contextAccessor;
 
-    public UserRepository(AppDbContext appDbContext, IConfiguration configuration)
+    public UserRepository(AppDbContext appDbContext, IConfiguration configuration,
+        IHttpContextAccessor contextAccessor)
     {
         _appDbContext = appDbContext;
         _configuration = configuration;
+        _contextAccessor = contextAccessor;
     }
     
     private async Task<ApplicationUser> FindUserByEmail(string email) =>
@@ -56,6 +62,41 @@ public class UserRepository : IUser
             return new LoginResponse(false, "Invalid credentials");
     }
 
+
+    public async Task<List<ApplicationUser>> GetAllUsersAsync()
+    {
+        return await _appDbContext.Users.ToListAsync();
+    }
+
+    public async Task<ApplicationUser> GetUserByIdAsync(int id)
+    {
+        return (await _appDbContext.Users.FindAsync(id))!;
+    }
+
+    public async Task<ApplicationUser?> GetCurrentLoggedInUserAsync(HttpContext context)
+    {
+        var userEmailClaim = _contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Email);
+        var userNameClaim = _contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Name);
+
+        if (userEmailClaim != null && userNameClaim != null)
+        {
+            var userEmail = userEmailClaim.Value;
+            var userName = userNameClaim.Value;
+            var user = await _appDbContext.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
+
+            if (user != null)
+            {
+                user.Name = userName;
+            }
+
+            return user;
+
+        }
+
+        return null;
+    }
+    
+
     public string GenerateJwtToken(ApplicationUser user)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -67,8 +108,7 @@ public class UserRepository : IUser
             new Claim(ClaimTypes.Name, user.Name),
             new Claim(ClaimTypes.Email, user.Email)
         };
-
-        // Adiciona as roles como claims
+        
         if (user.Roles != null)
         {
             foreach (var role in user.Roles)
