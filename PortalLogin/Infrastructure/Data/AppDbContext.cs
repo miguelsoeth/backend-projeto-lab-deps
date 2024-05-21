@@ -10,4 +10,25 @@ public class AppDbContext : DbContext
     }
     
     public DbSet<ApplicationUser> Users { get; set; }
+    public DbSet<Profiles> Profiles { get; set; }
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<ApplicationUser>()
+            .Property(u => u.Id)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<Profiles>()
+            .Property(p => p.Id)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<ApplicationUser>()
+            .HasMany(u => u.Profiles)
+            .WithOne(p => p.applicationUser)
+            .HasForeignKey(p => p.UserId);
+
+        base.OnModelCreating(modelBuilder);
+    }
+
+    
 }

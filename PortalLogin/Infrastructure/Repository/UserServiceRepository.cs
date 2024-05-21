@@ -2,26 +2,26 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Application.Contract;
 using Application.Dtos;
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Repository;
 
-public class UserRepository : IUser
+public class UserServiceRepository : IUserService
 {
     private readonly AppDbContext _appDbContext;
     private readonly IConfiguration _configuration;
     private readonly IHttpContextAccessor _contextAccessor;
 
-    public UserRepository(AppDbContext appDbContext, IConfiguration configuration,
+    public UserServiceRepository(AppDbContext appDbContext, IConfiguration configuration,
         IHttpContextAccessor contextAccessor)
     {
         _appDbContext = appDbContext;
@@ -43,7 +43,8 @@ public class UserRepository : IUser
             Name = registerUserDto.Name,
             Email = registerUserDto.Email,
             Password = BCrypt.Net.BCrypt.HashPassword(registerUserDto.Password),
-            Roles = registerUserDto.Roles
+            Roles = registerUserDto.Roles,
+            IsActive = true
         });
         await _appDbContext.SaveChangesAsync();
         return new RegistrationResponse(true, "Registration completed"); 
@@ -68,13 +69,18 @@ public class UserRepository : IUser
         return await _appDbContext.Users.ToListAsync();
     }
 
-    public async Task<ApplicationUser> GetUserByIdAsync(int id)
+    public async Task<ApplicationUser> GetUserByIdAsync(string id)
     {
-        return (await _appDbContext.Users.FindAsync(id))!;
+        return (await _appDbContext.Users.FindAsync(Guid.Parse(id)))!;
     }
 
     public async Task<ApplicationUser?> GetCurrentLoggedInUserAsync(HttpContext context)
     {
+        var options = new JsonSerializerOptions
+        {
+            ReferenceHandler = ReferenceHandler.Preserve
+        };
+
         var userEmailClaim = _contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Email);
         var userNameClaim = _contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Name);
 
@@ -82,15 +88,20 @@ public class UserRepository : IUser
         {
             var userEmail = userEmailClaim.Value;
             var userName = userNameClaim.Value;
-            var user = await _appDbContext.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
+        
+            // Carrega o usuário com os perfis associados
+            var user = await _appDbContext.Users
+                .Include(u => u.Profiles) // Carrega os perfis associados
+                .FirstOrDefaultAsync(u => u.Email == userEmail);
 
             if (user != null)
             {
                 user.Name = userName;
             }
 
-            return user;
-
+            return JsonSerializer.Deserialize<ApplicationUser>(
+                JsonSerializer.Serialize(user, options)
+            );
         }
 
         return null;

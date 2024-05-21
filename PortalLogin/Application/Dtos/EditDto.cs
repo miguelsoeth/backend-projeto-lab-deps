@@ -1,12 +1,11 @@
-namespace Domain.Entities;
+namespace Application.Dtos;
 
-public class ApplicationUser
+public class EditDto
 {
-    public Guid Id { get;  set; }
     public string? Name { get; set; }
     public string? Email { get; set; }
     public string? Password { get; set; }
     public bool IsActive { get; set; }
     public List<string>? Roles { get; set; }
-    public ICollection<Profiles>? Profiles { get; set; }
+ 
 }

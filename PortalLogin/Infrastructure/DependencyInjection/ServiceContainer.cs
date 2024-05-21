@@ -38,7 +38,8 @@ public static class ServiceContainer
             };
 
         });
-        services.AddScoped<IUser, UserRepository>();
+        services.AddScoped<IUserService, UserServiceRepository>();
+        services.AddScoped<IProfileService, ProfileServiceRepository>();
         return services;
     }
 }
