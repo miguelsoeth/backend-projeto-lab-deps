@@ -59,7 +59,7 @@ public class AccountController : ControllerBase
 
         _appDbContext.Users.Update(user);    
         await _appDbContext.SaveChangesAsync();
-        return Ok();
+        return Ok("Usuário editado com sucesso!");
     }
     
     

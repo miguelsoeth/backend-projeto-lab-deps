@@ -33,4 +33,21 @@ public class ProfileController : ControllerBase
         return Ok(profileResponse);
 
     }
+
+    [HttpGet("{userId:guid}/ListProfile")]
+    [Authorize(Roles = "Admin")]
+
+    public async Task<ActionResult> GetUserProfile(Guid userId)
+    {
+        try
+        {
+            var result = await _profile.GetUserProfileByIdAsync(userId);
+            return Ok(result);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+    }
+    
 }

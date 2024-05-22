@@ -132,7 +132,7 @@ public class UserServiceRepository : IUserService
             issuer: _configuration["Jwt:Issuer"],
             audience: _configuration["Jwt:Audience"],
             claims: claims,
-            expires: DateTime.Now.AddDays(7),
+            expires: DateTime.Now.AddDays(1),
             signingCredentials: credentials
         );
 

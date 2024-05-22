@@ -4,6 +4,7 @@ using Application.Dtos;
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repository;
 
@@ -53,5 +54,24 @@ public class ProfileServiceRepository : IProfileService
             UserId = profile.UserId,
             UserName = user.Name
         };
+    }
+
+    public async Task<ListUserProfileDto> GetUserProfileByIdAsync(Guid userId)
+    {
+        var user = await _appDbContext.Users
+            .Include(u => u.Profiles)
+            .FirstOrDefaultAsync(u => u.Id == userId);
+        if (user == null)
+        {
+            throw new KeyNotFoundException("User not found");
+        }
+
+        return new ListUserProfileDto
+        {
+            UserId = user.Id,
+            UserName = user.Name,
+            Profiles = user.Profiles?.Select(p => p.ProfileName).ToArray()
+        };
+
     }
 }
