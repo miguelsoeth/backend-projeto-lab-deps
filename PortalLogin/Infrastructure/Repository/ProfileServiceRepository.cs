@@ -5,6 +5,7 @@ using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Repository;
 
@@ -27,15 +28,18 @@ public class ProfileServiceRepository : IProfileService
 
         if (userIdClaim == null && userNameClaim == null)
         {
-            throw new UnauthorizedAccessException("User is not Authenticated");
+            throw new UnauthorizedAccessException("Usuário não autenticado");
         }
 
         var user = await _appDbContext.Users.FindAsync(Guid.Parse(userIdClaim));
 
         if (user == null)
         {
-            throw new Exception("User not found");
+            throw new Exception("Usuário não encontrado");
         }
+
+        var nameExist = await _appDbContext.Profiles.AnyAsync(u => u.ProfileName == profileDto.ProfileName);
+        if(nameExist) throw new BadHttpRequestException("Já existe um perfil com este nome");
 
         var profile = new Profiles
         {
@@ -63,7 +67,7 @@ public class ProfileServiceRepository : IProfileService
             .FirstOrDefaultAsync(u => u.Id == userId);
         if (user == null)
         {
-            throw new KeyNotFoundException("User not found");
+            throw new KeyNotFoundException("Perfil não encontrado");
         }
 
         return new ListUserProfileDto
@@ -74,4 +78,37 @@ public class ProfileServiceRepository : IProfileService
         };
 
     }
+
+    public async Task<EditProfileResponse> EditProfileByIdAsync(Guid id, EditProfileDto editProfileDto)
+    {
+        var response = new EditProfileResponse();
+        var existingProfile = await _appDbContext.Profiles.FindAsync(id);
+        if (existingProfile == null)
+        {
+            response.Message = "Perfil não encontrado";
+            return response;
+        }
+    
+
+        if (existingProfile.ProfileName == editProfileDto.ProfileName)
+        {
+
+            var existingProfileWithSameName = await _appDbContext.Profiles
+                .FirstOrDefaultAsync(u => u.ProfileName == editProfileDto.ProfileName);
+        
+            if (existingProfileWithSameName != null)
+            {
+                response.Message = "Já tem um perfil com este nome";
+                return response;
+            }
+        }
+        
+        existingProfile.ProfileName = editProfileDto.ProfileName;
+
+        await _appDbContext.SaveChangesAsync();
+
+        response.Message = "Perfil Atualizado com sucesso";
+        return response;
+    }
+
 }

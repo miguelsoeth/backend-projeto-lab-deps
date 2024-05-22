@@ -39,12 +39,12 @@ public class AccountController : ControllerBase
     [HttpPut("EditUser/{id}")]
     public async Task<ActionResult> EditUser([FromRoute] string id, EditDto editDto)
     {
-        var user = await _userService.GetUserByIdAsync(id);
 
-        if (user == null)
+        if (!Guid.TryParse(id, out Guid userId))
         {
-            return BadRequest("User not found");
+            return BadRequest("Id inválido");
         }
+        var user = await _userService.GetUserByIdAsync(userId.ToString());
 
         if (!string.IsNullOrEmpty(editDto.Password))
         {
@@ -52,8 +52,20 @@ public class AccountController : ControllerBase
             user.Password = editDto.Password;
         }
 
-        user.Name = editDto.Name;
-        user.Email = editDto.Email;
+        if (!string.IsNullOrEmpty(editDto.Name))
+        {
+            user.Name = editDto.Name;
+        }
+        
+        if (!string.IsNullOrEmpty(editDto.Email))
+        {
+            var emailExists = await _appDbContext.Users.AnyAsync(u => u.Email == editDto.Email);
+            
+            if (emailExists) return BadRequest("Email em uso!");
+            
+            user.Name = editDto.Email;
+        }
+
         user.IsActive = editDto.IsActive;
         user.Roles = editDto.Roles;
 

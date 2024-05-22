@@ -3,6 +3,7 @@ using Application.Contract;
 using Application.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace WebApi.Controllers;
 
@@ -36,7 +37,6 @@ public class ProfileController : ControllerBase
 
     [HttpGet("{userId:guid}/ListProfile")]
     [Authorize(Roles = "Admin")]
-
     public async Task<ActionResult> GetUserProfile(Guid userId)
     {
         try
@@ -49,5 +49,18 @@ public class ProfileController : ControllerBase
             return NotFound();
         }
     }
+
+    [HttpPut("editProfile/{id:guid}")]
+    public async Task<ActionResult> GetProfileById(Guid id, [FromBody] EditProfileDto editProfileDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        var result = await _profile.EditProfileByIdAsync(id, editProfileDto);
+        return Ok(result);
+    }
+    
+    
     
 }

@@ -36,7 +36,7 @@ public class UserServiceRepository : IUserService
     {
         var getUser = await FindUserByEmail(registerUserDto.Email!);
         if (getUser != null)
-            return new RegistrationResponse(false, "User already exist!");
+            return new RegistrationResponse(false, "Usuário já existe");
 
         _appDbContext.Users.Add(new ApplicationUser()
         {
@@ -90,18 +90,18 @@ public class UserServiceRepository : IUserService
             var userName = userNameClaim.Value;
         
             // Carrega o usuário com os perfis associados
-            var user = await _appDbContext.Users
-                .Include(u => u.Profiles) // Carrega os perfis associados
-                .FirstOrDefaultAsync(u => u.Email == userEmail);
+            var user = await _appDbContext.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
 
             if (user != null)
             {
                 user.Name = userName;
-            }
 
-            return JsonSerializer.Deserialize<ApplicationUser>(
-                JsonSerializer.Serialize(user, options)
-            );
+                // Serializa e desserializa o usuário para aplicar o ReferenceHandler
+                var serializedUser = JsonSerializer.Serialize(user, options);
+                var deserializedUser = JsonSerializer.Deserialize<ApplicationUser>(serializedUser, options);
+
+                return deserializedUser;
+            }
         }
 
         return null;
