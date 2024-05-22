@@ -8,7 +8,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d3723dbf-a83e-499a-8106-7cd5280239ff" name="Changes" comment="x">
+    <list default="true" id="d3723dbf-a83e-499a-8106-7cd5280239ff" name="Changes" comment="profiles">
       <change afterPath="$PROJECT_DIR$/Application/Dtos/EditProfileDto.cs" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Application/Dtos/EditProfileResponse.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PortalLogin/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PortalLogin/.idea/workspace.xml" afterDir="false" />
@@ -81,6 +81,7 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f4709220066144e1a777247088d0795c27cc20/2f/807b9923/EntityFrameworkQueryableExtensions.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f4709220066144e1a777247088d0795c27cc20/43/e0752764/DbContext.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/WebApi/Controllers/AccountController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///home/leonardo/Documentos/Projetos/NewProject/backend/LoginApi/PortalLogin/WebApi/Controllers/AccountController.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -252,7 +253,7 @@
       <workItem from="1715789623124" duration="4396000" />
       <workItem from="1716229945034" duration="7749000" />
       <workItem from="1716308140162" duration="15589000" />
-      <workItem from="1716394560760" duration="14103000" />
+      <workItem from="1716394560760" duration="14497000" />
     </task>
     <task id="LOCAL-00001" summary="adas">
       <option name="closed" value="true" />
@@ -318,7 +319,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716400373639</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="profiles">
+      <option name="closed" value="true" />
+      <created>1716411045831</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1716411045831</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -361,7 +370,8 @@
     <MESSAGE value="asda" />
     <MESSAGE value="." />
     <MESSAGE value="x" />
-    <option name="LAST_COMMIT_MESSAGE" value="x" />
+    <MESSAGE value="profiles" />
+    <option name="LAST_COMMIT_MESSAGE" value="profiles" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
