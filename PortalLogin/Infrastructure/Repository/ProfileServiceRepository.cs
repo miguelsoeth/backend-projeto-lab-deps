@@ -60,7 +60,7 @@ public class ProfileServiceRepository : IProfileService
         };
     }
 
-    public async Task<ListUserProfileDto> GetUserProfileByIdAsync(Guid userId)
+    public async Task<ListProfileDto> GetUserProfileByIdAsync(Guid userId)
     {
         var user = await _appDbContext.Users
             .Include(u => u.Profiles)
@@ -70,12 +70,16 @@ public class ProfileServiceRepository : IProfileService
             throw new KeyNotFoundException("Perfil não encontrado");
         }
 
-        return new ListUserProfileDto
+        var userProfileDto = new ListProfileDto
         {
-            UserId = user.Id,
-            UserName = user.Name,
-            Profiles = user.Profiles?.Select(p => p.ProfileName).ToArray()
+            Profiles = user.Profiles.Select(p => new ListUserProfileDto
+            {
+                idProfile = p.Id,
+                ProfileName = p.ProfileName
+            }).ToList()
         };
+
+        return userProfileDto;
 
     }
 
@@ -124,6 +128,7 @@ public class ProfileServiceRepository : IProfileService
 
         return new EditProfileResponse
         {
+            
             Profilename = existingProfile.ProfileName,
             Message = "Perfil encontrado!"
         };

@@ -43,7 +43,7 @@ public class ProfileController : ControllerBase
         try
         {
             var result = await _profile.GetUserProfileByIdAsync(userId);
-            return Ok(result);
+            return Ok(result.Profiles);
         }
         catch (KeyNotFoundException)
         {

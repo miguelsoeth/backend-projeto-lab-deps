@@ -65,7 +65,7 @@ public class AccountController : ControllerBase
             
             if (emailExists) return BadRequest("Email em uso!");
             
-            user.Name = editUserDto.Email;
+            user.Email = editUserDto.Email;
         }
 
         user.IsActive = editUserDto.IsActive;

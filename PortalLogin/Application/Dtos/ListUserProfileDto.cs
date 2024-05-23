@@ -2,7 +2,11 @@ namespace Application.Dtos;
 
 public class ListUserProfileDto
 {
-    public Guid UserId { get; set; }
-    public string? UserName { get; set; }
-    public string[]? Profiles { get; set; }
+    public Guid idProfile { get; set; }
+    public string? ProfileName { get; set; }
+}
+
+public class ListProfileDto
+{
+    public List<ListUserProfileDto> Profiles { get; set; }
 }
