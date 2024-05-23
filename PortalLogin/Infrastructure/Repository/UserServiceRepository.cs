@@ -53,7 +53,13 @@ public class UserServiceRepository : IUserService
     public async Task<LoginResponse> LoginUserAsync(LoginDto loginDto)
     {
         var getUser = await FindUserByEmail(loginDto.Email!);
+        var isActive = await _appDbContext.Users.FirstOrDefaultAsync(u => u.IsActive != true);
 
+        if (isActive.IsActive == false)
+        {
+            return new LoginResponse(false, "Usuário desativado");
+        }
+        
         if (getUser == null!) return new LoginResponse(false, "User not found");
 
         bool checkPassword = BCrypt.Net.BCrypt.Verify(loginDto.Password, getUser.Password);
@@ -132,7 +138,7 @@ public class UserServiceRepository : IUserService
             issuer: _configuration["Jwt:Issuer"],
             audience: _configuration["Jwt:Audience"],
             claims: claims,
-            expires: DateTime.Now.AddDays(1),
+            expires: DateTime.Now.AddMinutes(30),
             signingCredentials: credentials
         );
 

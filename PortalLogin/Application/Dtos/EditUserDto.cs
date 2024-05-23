@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Application.Dtos;
 
-public class EditDto
+public class EditUserDto
 {
     public string? Name { get; set; }
     [EmailAddress]

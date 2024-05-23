@@ -30,6 +30,7 @@ public class AccountController : ControllerBase
     }
     
     [HttpPost("register")] 
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<LoginResponse>> RegisterUser(RegisterUserDto registerUser)
     {
         var result = await _userService.RegisterUserAsync(registerUser);
@@ -37,7 +38,8 @@ public class AccountController : ControllerBase
     }
 
     [HttpPut("EditUser/{id}")]
-    public async Task<ActionResult> EditUser([FromRoute] string id, EditDto editDto)
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult> EditUser([FromRoute] string id, EditUserDto editUserDto)
     {
 
         if (!Guid.TryParse(id, out Guid userId))
@@ -46,28 +48,28 @@ public class AccountController : ControllerBase
         }
         var user = await _userService.GetUserByIdAsync(userId.ToString());
 
-        if (!string.IsNullOrEmpty(editDto.Password))
+        if (!string.IsNullOrEmpty(editUserDto.Password))
         {
-            editDto.Password = BCrypt.Net.BCrypt.HashPassword(editDto.Password);
-            user.Password = editDto.Password;
+            editUserDto.Password = BCrypt.Net.BCrypt.HashPassword(editUserDto.Password);
+            user.Password = editUserDto.Password;
         }
 
-        if (!string.IsNullOrEmpty(editDto.Name))
+        if (!string.IsNullOrEmpty(editUserDto.Name))
         {
-            user.Name = editDto.Name;
+            user.Name = editUserDto.Name;
         }
         
-        if (!string.IsNullOrEmpty(editDto.Email))
+        if (!string.IsNullOrEmpty(editUserDto.Email))
         {
-            var emailExists = await _appDbContext.Users.AnyAsync(u => u.Email == editDto.Email);
+            var emailExists = await _appDbContext.Users.AnyAsync(u => u.Email == editUserDto.Email);
             
             if (emailExists) return BadRequest("Email em uso!");
             
-            user.Name = editDto.Email;
+            user.Name = editUserDto.Email;
         }
 
-        user.IsActive = editDto.IsActive;
-        user.Roles = editDto.Roles;
+        user.IsActive = editUserDto.IsActive;
+        user.Roles = editUserDto.Roles;
 
         _appDbContext.Users.Update(user);    
         await _appDbContext.SaveChangesAsync();

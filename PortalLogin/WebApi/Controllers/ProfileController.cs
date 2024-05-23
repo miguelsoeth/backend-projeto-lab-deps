@@ -22,6 +22,7 @@ public class ProfileController : ControllerBase
     }
 
     [HttpPost("CreateProfile")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<ProfileResponse>> CreateProfile([FromBody] ProfileDto profileDto)
     {
         var userId = _contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -51,6 +52,7 @@ public class ProfileController : ControllerBase
     }
 
     [HttpPut("editProfile/{id:guid}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> GetProfileById(Guid id, [FromBody] EditProfileDto editProfileDto)
     {
         if (!ModelState.IsValid)
@@ -59,6 +61,15 @@ public class ProfileController : ControllerBase
         }
         var result = await _profile.EditProfileByIdAsync(id, editProfileDto);
         return Ok(result);
+    }
+
+    [HttpGet("getProfileId/{id:guid}")]
+
+    public async Task<ActionResult> GetProfileById(Guid id)
+    {
+        var result = await _profile.ListProfileByIdAsync(id);
+        return Ok(result);
+
     }
     
     

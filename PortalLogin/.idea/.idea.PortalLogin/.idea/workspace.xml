@@ -8,26 +8,38 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d3723dbf-a83e-499a-8106-7cd5280239ff" name="Changes" comment="profiles">
-      <change afterPath="$PROJECT_DIR$/Application/Dtos/EditProfileDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Application/Dtos/EditProfileResponse.cs" afterDir="false" />
+    <list default="true" id="d3723dbf-a83e-499a-8106-7cd5280239ff" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PortalLogin/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PortalLogin/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Application/Contract/IProfileService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Contract/IProfileService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Dtos/EditDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Dtos/EditDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/Dtos/EditDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Dtos/EditUserDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/Dtos/EditProfileResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Dtos/EditProfileResponse.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Application/bin/Debug/net8.0/Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Application/bin/Debug/net8.0/Application.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Application/bin/Debug/net8.0/Application.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/Application/bin/Debug/net8.0/Application.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/bin/Debug/net8.0/Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Application/bin/Debug/net8.0/Domain.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/bin/Debug/net8.0/Domain.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/Application/bin/Debug/net8.0/Domain.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Application/obj/Debug/net8.0/Application.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/obj/Debug/net8.0/Application.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Application/obj/Debug/net8.0/Application.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/Application/obj/Debug/net8.0/Application.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/obj/Debug/net8.0/Application.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/Application/obj/Debug/net8.0/Application.csproj.CoreCompileInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/obj/Debug/net8.0/Application.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/Application/obj/Debug/net8.0/Application.csproj.AssemblyReference.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Application/obj/Debug/net8.0/Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Application/obj/Debug/net8.0/Application.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Application/obj/Debug/net8.0/Application.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/Application/obj/Debug/net8.0/Application.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Application/obj/Debug/net8.0/Application.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/Application/obj/Debug/net8.0/Application.sourcelink.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Application/obj/Debug/net8.0/ref/Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Application/obj/Debug/net8.0/ref/Application.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Application/obj/Debug/net8.0/refint/Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Application/obj/Debug/net8.0/refint/Application.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Domain/bin/Debug/net8.0/Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/bin/Debug/net8.0/Domain.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Domain/bin/Debug/net8.0/Domain.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/bin/Debug/net8.0/Domain.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Domain/obj/Debug/net8.0/Domain.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/obj/Debug/net8.0/Domain.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Domain/obj/Debug/net8.0/Domain.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/obj/Debug/net8.0/Domain.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Domain/obj/Debug/net8.0/Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/obj/Debug/net8.0/Domain.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Domain/obj/Debug/net8.0/Domain.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/obj/Debug/net8.0/Domain.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Domain/obj/Debug/net8.0/Domain.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/obj/Debug/net8.0/Domain.sourcelink.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Domain/obj/Debug/net8.0/ref/Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/obj/Debug/net8.0/ref/Domain.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Domain/obj/Debug/net8.0/refint/Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/obj/Debug/net8.0/refint/Domain.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Infrastructure/Repository/ProfileServiceRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Repository/ProfileServiceRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Infrastructure/Repository/UserServiceRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Repository/UserServiceRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Infrastructure/bin/Debug/net8.0/Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/bin/Debug/net8.0/Application.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Infrastructure/bin/Debug/net8.0/Application.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/bin/Debug/net8.0/Application.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/bin/Debug/net8.0/Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/bin/Debug/net8.0/Domain.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/bin/Debug/net8.0/Domain.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/bin/Debug/net8.0/Domain.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Infrastructure/bin/Debug/net8.0/Infrastructure.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/bin/Debug/net8.0/Infrastructure.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Infrastructure/bin/Debug/net8.0/Infrastructure.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/bin/Debug/net8.0/Infrastructure.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Infrastructure/obj/Debug/net8.0/Infrastructure.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/obj/Debug/net8.0/Infrastructure.AssemblyInfo.cs" afterDir="false" />
@@ -42,6 +54,8 @@
       <change beforePath="$PROJECT_DIR$/WebApi/Controllers/ProfileController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebApi/Controllers/ProfileController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WebApi/bin/Debug/net8.0/Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WebApi/bin/Debug/net8.0/Application.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WebApi/bin/Debug/net8.0/Application.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/WebApi/bin/Debug/net8.0/Application.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebApi/bin/Debug/net8.0/Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WebApi/bin/Debug/net8.0/Domain.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebApi/bin/Debug/net8.0/Domain.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/WebApi/bin/Debug/net8.0/Domain.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WebApi/bin/Debug/net8.0/Infrastructure.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WebApi/bin/Debug/net8.0/Infrastructure.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WebApi/bin/Debug/net8.0/Infrastructure.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/WebApi/bin/Debug/net8.0/Infrastructure.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WebApi/bin/Debug/net8.0/WebApi.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WebApi/bin/Debug/net8.0/WebApi.dll" afterDir="false" />
@@ -96,29 +110,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Launch Settings Profile.WebApi: http.executor": "Run",
-    ".NET Launch Settings Profile.WebApi: https.executor": "Run",
-    "Docker.WebApi/Dockerfile.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Launch Settings Profile.WebApi: http.executor&quot;: &quot;Run&quot;,
+    &quot;.NET Launch Settings Profile.WebApi: https.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.WebApi/Dockerfile.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "rider.external.source.directories": [
-      "/home/leonardo/.config/JetBrains/Rider2024.1/resharper-host/DecompilerCache",
-      "/home/leonardo/.config/JetBrains/Rider2024.1/resharper-host/SourcesCache",
-      "/home/leonardo/.local/share/Symbols/src"
+  &quot;keyToStringList&quot;: {
+    &quot;rider.external.source.directories&quot;: [
+      &quot;/home/leonardo/.config/JetBrains/Rider2024.1/resharper-host/DecompilerCache&quot;,
+      &quot;/home/leonardo/.config/JetBrains/Rider2024.1/resharper-host/SourcesCache&quot;,
+      &quot;/home/leonardo/.local/share/Symbols/src&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected=".NET Launch Settings Profile.WebApi: https">
     <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
       <deployment type="dockerfile">
@@ -253,7 +267,8 @@
       <workItem from="1715789623124" duration="4396000" />
       <workItem from="1716229945034" duration="7749000" />
       <workItem from="1716308140162" duration="15589000" />
-      <workItem from="1716394560760" duration="14497000" />
+      <workItem from="1716394560760" duration="14709000" />
+      <workItem from="1716481589524" duration="5312000" />
     </task>
     <task id="LOCAL-00001" summary="adas">
       <option name="closed" value="true" />
@@ -327,7 +342,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716411045831</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary=".">
+      <option name="closed" value="true" />
+      <created>1716411056711</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1716411056711</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -368,10 +391,29 @@
     <MESSAGE value="ian" />
     <MESSAGE value="autenticacao funcionando" />
     <MESSAGE value="asda" />
-    <MESSAGE value="." />
     <MESSAGE value="x" />
     <MESSAGE value="profiles" />
-    <option name="LAST_COMMIT_MESSAGE" value="profiles" />
+    <MESSAGE value="." />
+    <option name="LAST_COMMIT_MESSAGE" value="." />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Infrastructure/Repository/UserServiceRepository.cs</url>
+          <line>55</line>
+          <properties documentPath="$PROJECT_DIR$/Infrastructure/Repository/UserServiceRepository.cs" containingFunctionPresentation="Method 'LoginUserAsync'">
+            <startOffsets>
+              <option value="1944" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2030" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

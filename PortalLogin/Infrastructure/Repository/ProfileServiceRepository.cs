@@ -111,4 +111,21 @@ public class ProfileServiceRepository : IProfileService
         return response;
     }
 
+    public async Task<EditProfileResponse> ListProfileByIdAsync(Guid id)
+    {
+        var existingProfile = await _appDbContext.Profiles.FindAsync(id);
+        if (existingProfile == null)
+        {
+            return new EditProfileResponse
+            {
+                Message = "Perfil não encontrado"
+            };
+        }
+
+        return new EditProfileResponse
+        {
+            Profilename = existingProfile.ProfileName,
+            Message = "Perfil encontrado!"
+        };
+    }
 }
