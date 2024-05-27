@@ -8,4 +8,5 @@ public interface IProfileService
     Task<ListProfileDto> GetUserProfileByIdAsync(Guid userId);
     Task<EditProfileResponse> EditProfileByIdAsync(Guid id, EditProfileDto editProfileDto);
     Task<EditProfileResponse> ListProfileByIdAsync(Guid id);
+    Task<EditProfileResponse> DeleteProfileByIdAsync(Guid id);
 }

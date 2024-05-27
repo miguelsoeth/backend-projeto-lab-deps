@@ -55,7 +55,7 @@ public class UserServiceRepository : IUserService
         var getUser = await FindUserByEmail(loginDto.Email!);
         var isActive = await _appDbContext.Users.FirstOrDefaultAsync(u => u.IsActive != true);
 
-        if (isActive.IsActive == false)
+        if (getUser.IsActive == false)
         {
             return new LoginResponse(false, "Usuário desativado");
         }

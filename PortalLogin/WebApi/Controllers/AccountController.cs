@@ -29,8 +29,7 @@ public class AccountController : ControllerBase
         return Ok(result);
     }
     
-    [HttpPost("register")] 
-    [Authorize(Roles = "Admin")]
+    [HttpPost("register")]
     public async Task<ActionResult<LoginResponse>> RegisterUser(RegisterUserDto registerUser)
     {
         var result = await _userService.RegisterUserAsync(registerUser);

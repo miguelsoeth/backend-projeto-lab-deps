@@ -63,11 +63,11 @@ public class ProfileController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("getProfileId/{id:guid}")]
-
-    public async Task<ActionResult> GetProfileById(Guid id)
+    [HttpDelete("deleteProfile/{id:guid}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult> DeleteProfileById(Guid id)
     {
-        var result = await _profile.ListProfileByIdAsync(id);
+        var result = await _profile.DeleteProfileByIdAsync(id);
         return Ok(result);
 
     }

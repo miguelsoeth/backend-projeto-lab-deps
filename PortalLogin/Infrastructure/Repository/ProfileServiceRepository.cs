@@ -133,4 +133,24 @@ public class ProfileServiceRepository : IProfileService
             Message = "Perfil encontrado!"
         };
     }
+
+    public async Task<EditProfileResponse> DeleteProfileByIdAsync(Guid id)
+    {
+        var existingProfile = await _appDbContext.Profiles.FindAsync(id);
+        if (existingProfile == null)
+        {
+            return new EditProfileResponse
+            {
+                Message = "Perfil não encontrado"
+            };
+        }
+
+        _appDbContext.Profiles.Remove(existingProfile);
+        await _appDbContext.SaveChangesAsync();
+
+        return new EditProfileResponse
+        {
+            Message = "Perfil deletado com sucesso"
+        };
+    }
 }
