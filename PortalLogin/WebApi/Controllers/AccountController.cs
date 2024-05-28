@@ -1,12 +1,10 @@
 using Application.Contract;
 using Application.Dtos;
+using Application.Dtos.Account;
 using Domain.Entities;
 using Infrastructure.Data;
-using Infrastructure.Repository;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace WebApi.Controllers;
 [Route("api/[controller]")]
@@ -39,72 +37,34 @@ public class AccountController : ControllerBase
 
     [HttpPut("edit/{id}")]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult> EditUser([FromRoute] string id, EditUserDto editUserDto)
+    public async Task<ActionResult<AuthResponseDto>> EditUser([FromRoute] string id, UserDetailDto editUserDto)
     {
-
-        if (!Guid.TryParse(id, out Guid userId))
-        {
-            return BadRequest("Id inválido");
-        }
-        var user = await _userService.GetUserByIdAsync(userId.ToString());
-
-        if (!string.IsNullOrEmpty(editUserDto.Password))
-        {
-            editUserDto.Password = BCrypt.Net.BCrypt.HashPassword(editUserDto.Password);
-            user.Password = editUserDto.Password;
-        }
-
-        if (!string.IsNullOrEmpty(editUserDto.Name))
-        {
-            user.Name = editUserDto.Name;
-        }
-        
-        if (!string.IsNullOrEmpty(editUserDto.Email))
-        {
-            var emailExists = await _appDbContext.Users.AnyAsync(u => u.Email == editUserDto.Email);
-            
-            if (emailExists) return BadRequest("Email em uso!");
-            
-            user.Email = editUserDto.Email;
-        }
-
-        user.IsActive = editUserDto.IsActive;
-        user.Roles = editUserDto.Roles;
-
-        _appDbContext.Users.Update(user);    
-        await _appDbContext.SaveChangesAsync();
-        return Ok("Usuário editado com sucesso!");
-    }
-    
-    
-
-    [HttpGet("AllUsers")]
-    [Authorize(Roles = "Admin")]
-    public async Task<ActionResult> AllUsers()
-    {
-        var result = await _userService.GetAllUsersAsync();
+        var result = await _userService.EditUserAsync(id, editUserDto);
         return Ok(result);
     }
-
-    [HttpGet("UserId")]
+    
+    [HttpGet("account/{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult> GetUserById(string id)
     {
         var result = await _userService.GetUserByIdAsync(id);
+        if (result == null) return NotFound(result);
         return Ok(result);
     }
     
-    [HttpGet("CurrentUser")]
+    [HttpGet("account/all-users")]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<ApplicationUser>> GetCurrentUser()
+    public async Task<ActionResult<IEnumerable<UserDetailDto>>> AllUsers()
+    {
+        var result = await _userService.GetAllUsersAsync();
+        return Ok(result);
+    }
+    
+    [HttpGet("account/current-user")]
+    [Authorize]
+    public async Task<ActionResult<UserDetailDto>> GetCurrentUser()
     {
         var result = await _userService.GetCurrentLoggedInUserAsync(HttpContext);
-
-        if (result == null)
-        {
-            return NotFound();
-        }
-        
         return Ok(result);
     }
     

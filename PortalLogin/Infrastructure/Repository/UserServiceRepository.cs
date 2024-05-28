@@ -6,9 +6,11 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Application.Contract;
 using Application.Dtos;
+using Application.Dtos.Account;
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -108,18 +110,92 @@ public class UserServiceRepository : IUserService
         };
     }
 
-
-    public async Task<List<ApplicationUser>> GetAllUsersAsync()
+    public async Task<AuthResponseDto> EditUserAsync(string id, UserDetailDto editUserDto)
     {
-        return await _appDbContext.Users.ToListAsync();
+        //Verifica o Id
+        if (!Guid.TryParse(id, out Guid userId))
+        {
+            return new AuthResponseDto
+            {
+                IsSuccess = false,
+                Message = "Id inválido!"
+            }; 
+        }
+        //Encontra o usuário
+        var user = await _appDbContext.Users.FindAsync(userId);
+        if (user == null!) return new AuthResponseDto
+        {
+            IsSuccess = false,
+            Message = "Usuário não encontrado."
+        };
+        //Verifica campos e edita o usuário
+        user.IsActive = editUserDto.IsActive;
+        user.Roles = editUserDto.Roles;
+        
+        if (!string.IsNullOrEmpty(editUserDto.Name)) user.Name = editUserDto.Name;
+        
+        if (!string.IsNullOrEmpty(editUserDto.Document)) user.Document = editUserDto.Document;
+        
+        if (!string.IsNullOrEmpty(editUserDto.Password))
+        {
+            editUserDto.Password = BCrypt.Net.BCrypt.HashPassword(editUserDto.Password);
+            user.Password = editUserDto.Password;
+        }
+        
+        if (!string.IsNullOrEmpty(editUserDto.Email))
+        {
+            var emailExists = await _appDbContext.Users.AnyAsync(u => u.Email == editUserDto.Email);
+            if (emailExists) return new AuthResponseDto
+            {
+                IsSuccess = false,
+                Message = "Email em uso!"
+            };
+            user.Email = editUserDto.Email;
+        }
+        //Insere o usuário no banco
+        _appDbContext.Users.Update(user);
+        await _appDbContext.SaveChangesAsync();
+        return new AuthResponseDto
+        {
+            IsSuccess = true,
+            Message = "Usuário editado com sucesso!"
+        };
+    }
+    
+    public async Task<List<UserDetailDto>> GetAllUsersAsync()
+    {
+        var users = await _appDbContext.Users.Select(u => new UserDetailDto
+        {
+            Id = u.Id,
+            Email = u.Email,
+            Name = u.Name,
+            Document = u.Document,
+            Roles = u.Roles,
+            IsActive = u.IsActive
+        }).ToListAsync();
+        return users;
     }
 
-    public async Task<ApplicationUser> GetUserByIdAsync(string id)
+    public async Task<UserDetailDto> GetUserByIdAsync(string id)
     {
-        return (await _appDbContext.Users.FindAsync(Guid.Parse(id)))!;
+        if (!Guid.TryParse(id, out Guid userId))
+        {
+            return null;
+        }
+        var user = await _appDbContext.Users.FindAsync(userId);
+        if (user is null) return null;
+        
+        return new UserDetailDto() {
+            Id = user.Id,
+            Email = user.Email,
+            Name = user.Name,
+            Document = user.Document,
+            Roles = user.Roles,
+            IsActive = user.IsActive
+        };
     }
 
-    public async Task<ApplicationUser?> GetCurrentLoggedInUserAsync(HttpContext context)
+    public async Task<UserDetailDto?> GetCurrentLoggedInUserAsync(HttpContext context)
     {
         var options = new JsonSerializerOptions
         {
@@ -144,15 +220,20 @@ public class UserServiceRepository : IUserService
                 // Serializa e desserializa o usuário para aplicar o ReferenceHandler
                 var serializedUser = JsonSerializer.Serialize(user, options);
                 var deserializedUser = JsonSerializer.Deserialize<ApplicationUser>(serializedUser, options);
-
-                return deserializedUser;
+                return new UserDetailDto() {
+                    Id = deserializedUser!.Id,
+                    Email = deserializedUser.Email,
+                    Name = deserializedUser.Name,
+                    Document = deserializedUser.Document,
+                    Roles = deserializedUser.Roles,
+                    IsActive = deserializedUser.IsActive
+                };
             }
         }
 
         return null;
     }
     
-
     public string GenerateJwtToken(ApplicationUser user)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
