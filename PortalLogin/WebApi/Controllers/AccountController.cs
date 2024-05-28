@@ -35,7 +35,7 @@ public class AccountController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPut("edit/{id}")]
+    [HttpPut("{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<AuthResponseDto>> EditUser([FromRoute] string id, UserDetailDto editUserDto)
     {
@@ -43,7 +43,7 @@ public class AccountController : ControllerBase
         return Ok(result);
     }
     
-    [HttpGet("account/{id}")]
+    [HttpGet("{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult> GetUserById(string id)
     {
@@ -52,7 +52,7 @@ public class AccountController : ControllerBase
         return Ok(result);
     }
     
-    [HttpGet("account/all-users")]
+    [HttpGet("all-users")]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<IEnumerable<UserDetailDto>>> AllUsers()
     {
@@ -60,7 +60,7 @@ public class AccountController : ControllerBase
         return Ok(result);
     }
     
-    [HttpGet("account/current-user")]
+    [HttpGet("current-user")]
     [Authorize]
     public async Task<ActionResult<UserDetailDto>> GetCurrentUser()
     {

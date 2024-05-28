@@ -9,8 +9,9 @@ public class ApplicationUser
     public string? Password { get; set; }
     public bool IsActive { get; set; }
     public List<string>? Roles { get; set; }
-    public ICollection<Profiles>? Profiles { get; set; }
-    
     public string? RefreshToken { get; set; }
     public DateTime RefreshTokenExpiryTime { get; set; }
+    
+    //Relações da tabela
+    public ICollection<Profiles>? Profiles { get; set; }
 }

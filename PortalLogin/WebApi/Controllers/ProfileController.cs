@@ -21,7 +21,7 @@ public class ProfileController : ControllerBase
         _contextAccessor = contextAccessor;
     }
 
-    [HttpPost("CreateProfile")]
+    [HttpPost]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<ProfileResponse>> CreateProfile([FromBody] ProfileDto profileDto)
     {
@@ -36,7 +36,28 @@ public class ProfileController : ControllerBase
 
     }
 
-    [HttpGet("{userId:guid}/ListProfile")]
+    [HttpPut("{id:guid}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult> GetProfileById(Guid id, [FromBody] EditProfileDto editProfileDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        var result = await _profile.EditProfileByIdAsync(id, editProfileDto);
+        return Ok(result);
+    }
+
+    [HttpDelete("{id:guid}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult> DeleteProfileById(Guid id)
+    {
+        var result = await _profile.DeleteProfileByIdAsync(id);
+        return Ok(result);
+
+    }
+    
+    [HttpGet("{userId:guid}/profiles")]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult> GetUserProfile(Guid userId)
     {
@@ -50,28 +71,4 @@ public class ProfileController : ControllerBase
             return NotFound();
         }
     }
-
-    [HttpPut("editProfile/{id:guid}")]
-    [Authorize(Roles = "Admin")]
-    public async Task<ActionResult> GetProfileById(Guid id, [FromBody] EditProfileDto editProfileDto)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-        var result = await _profile.EditProfileByIdAsync(id, editProfileDto);
-        return Ok(result);
-    }
-
-    [HttpDelete("deleteProfile/{id:guid}")]
-    [Authorize(Roles = "Admin")]
-    public async Task<ActionResult> DeleteProfileById(Guid id)
-    {
-        var result = await _profile.DeleteProfileByIdAsync(id);
-        return Ok(result);
-
-    }
-    
-    
-    
 }
