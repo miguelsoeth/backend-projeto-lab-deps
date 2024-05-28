@@ -11,4 +11,5 @@ public interface IUserService
     Task<List<ApplicationUser>> GetAllUsersAsync();
     Task<ApplicationUser> GetUserByIdAsync(string id);
     Task<ApplicationUser?> GetCurrentLoggedInUserAsync(HttpContext context);
+    Task<AuthResponseDto> RefreshToken(TokenDto tokenDto);
 }

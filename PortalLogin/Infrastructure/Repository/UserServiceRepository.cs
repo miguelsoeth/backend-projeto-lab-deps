@@ -1,6 +1,7 @@
 
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -9,6 +10,7 @@ using Application.Dtos;
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -99,12 +101,18 @@ public class UserServiceRepository : IUserService
             IsSuccess = false,
             Message = "Senha incorreta."
         };
-        
+
+        var refreshToken = GenerateRefreshToken();
+        _ = int.TryParse(_configuration.GetSection("Jwt").GetSection("RefreshTokenValidityIn").Value!, out int RefreshTokenValidityIn);
+        getUser.RefreshToken = refreshToken;
+        getUser.RefreshTokenExpiryTime = DateTime.UtcNow.AddMinutes(RefreshTokenValidityIn);
+        await _appDbContext.SaveChangesAsync();
         return new AuthResponseDto
         {
             IsSuccess = true,
             Message = "Logado com sucesso!",
             Token = GenerateJwtToken(getUser),
+            RefreshToken = refreshToken
         };
     }
 
@@ -183,4 +191,72 @@ public class UserServiceRepository : IUserService
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+    
+    
+    private string GenerateRefreshToken()
+    {
+        var randomNumber = new byte[32];
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
+        return Convert.ToBase64String(randomNumber);
+    }
+    
+    
+    
+    private ClaimsPrincipal? GetPrincipalFromExpiredToken(string token)
+    {
+        var tokenParameters = new TokenValidationParameters
+        {
+            ValidateAudience = false,
+            ValidateIssuer = false,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Jwt").GetSection("Key").Value!)),
+            ValidateLifetime = false
+
+
+        };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var principal = tokenHandler.ValidateToken(token, tokenParameters, out SecurityToken securityToken);
+
+        if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            throw new SecurityTokenException("Token Inválido!");
+
+        return principal;
+    }
+
+    public async Task<AuthResponseDto> RefreshToken(TokenDto tokenDto)
+    {
+        var principal = GetPrincipalFromExpiredToken(tokenDto.Token);
+        var user = await FindUserByEmail(tokenDto.Email);
+
+        if (principal is null || user is null || user.RefreshToken != tokenDto.RefreshToken ||
+            user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+        {
+            return new AuthResponseDto
+            {
+                IsSuccess = false,
+                Message = "Solicitação de cliente inválida!"
+            };
+        }
+        
+        var newJwtToken = GenerateJwtToken(user);
+        var newRefreshToken = GenerateRefreshToken();
+        _ = int.TryParse(_configuration.GetSection("Jwt").GetSection("RefreshTokenValidityIn").Value!, out int RefreshTokenValidityIn);
+
+        user.RefreshToken = newRefreshToken;
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddMinutes(RefreshTokenValidityIn);
+
+        await _appDbContext.SaveChangesAsync(); 
+
+        return new AuthResponseDto
+        {
+            IsSuccess = true,
+            Token = newJwtToken,
+            RefreshToken = newRefreshToken,
+            Message = "Token atualizado com sucesso!"
+        };
+
+    }
+    
 }
