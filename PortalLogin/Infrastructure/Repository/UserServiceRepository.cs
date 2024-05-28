@@ -32,41 +32,80 @@ public class UserServiceRepository : IUserService
     private async Task<ApplicationUser> FindUserByEmail(string email) =>
         await _appDbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
 
-    public async Task<RegistrationResponse> RegisterUserAsync(RegisterUserDto registerUserDto)
+    public async Task<AuthResponseDto> RegisterUserAsync(UserDetailDto registerUser)
     {
-        var getUser = await FindUserByEmail(registerUserDto.Email!);
-        if (getUser != null)
-            return new RegistrationResponse(false, "Usuário já existe");
-
+        var getUser = await FindUserByEmail(registerUser.Email!);
+        //Verifica se o usuário já existe
+        if (getUser != null) return new AuthResponseDto
+        {
+            IsSuccess = false,
+            Message = "Usuário já existe."
+        };
+        //Verifica se os campos necessários não são nulos
+        string? reason = null;
+        if (registerUser.Password.IsNullOrEmpty()) reason = "Obrigatório preencher campo Senha!";
+        if (registerUser.Name.IsNullOrEmpty()) reason = "Obrigatório preencher campo Nome!";
+        if (reason != null) return new AuthResponseDto
+        {
+            IsSuccess = false,
+            Message = reason
+        };
+        //Verifica de as roles estão vazias e corrige
+        if (registerUser.Roles.IsNullOrEmpty())
+        {
+            registerUser.Roles = new List<string>
+            {
+                "User"
+            };
+        }
+        //Adiciona o usuário no banco de dados
         _appDbContext.Users.Add(new ApplicationUser()
         {
-            Name = registerUserDto.Name,
-            Email = registerUserDto.Email,
-            Password = BCrypt.Net.BCrypt.HashPassword(registerUserDto.Password),
-            Roles = registerUserDto.Roles,
+            Name = registerUser.Name,
+            Email = registerUser.Email,
+            Document = registerUser.Document,
+            Password = BCrypt.Net.BCrypt.HashPassword(registerUser.Password),
+            Roles = registerUser.Roles,
             IsActive = true
         });
         await _appDbContext.SaveChangesAsync();
-        return new RegistrationResponse(true, "Registration completed"); 
+        
+        return new AuthResponseDto
+        {
+            IsSuccess = true,
+            Message = "Registro completado com sucesso!"
+        };
     }
 
-    public async Task<LoginResponse> LoginUserAsync(LoginDto loginDto)
+    public async Task<AuthResponseDto> LoginUserAsync(LoginDto loginDto)
     {
         var getUser = await FindUserByEmail(loginDto.Email!);
-        var isActive = await _appDbContext.Users.FirstOrDefaultAsync(u => u.IsActive != true);
 
-        if (getUser.IsActive == false)
+        if (getUser == null!) return new AuthResponseDto
         {
-            return new LoginResponse(false, "Usuário desativado");
-        }
+            IsSuccess = false,
+            Message = "Usuário não encontrado."
+        };
         
-        if (getUser == null!) return new LoginResponse(false, "User not found");
-
+        if (getUser.IsActive == false) return new AuthResponseDto
+        {
+            IsSuccess = false,
+            Message = "Usuário desativado."
+        };
+        
         bool checkPassword = BCrypt.Net.BCrypt.Verify(loginDto.Password, getUser.Password);
-        if (checkPassword)
-            return new LoginResponse(true, "Login successfully", GenerateJwtToken(getUser));
-        else
-            return new LoginResponse(false, "Invalid credentials");
+        if (!checkPassword) return new AuthResponseDto
+        {
+            IsSuccess = false,
+            Message = "Senha incorreta."
+        };
+        
+        return new AuthResponseDto
+        {
+            IsSuccess = true,
+            Message = "Logado com sucesso!",
+            Token = GenerateJwtToken(getUser),
+        };
     }
 
 

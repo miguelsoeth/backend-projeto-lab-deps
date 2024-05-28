@@ -23,20 +23,21 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<LoginResponse>> LogUserIn(LoginDto loginDto)
+    public async Task<ActionResult<AuthResponseDto>> LogUserIn(LoginDto loginDto)
     {
         var result = await _userService.LoginUserAsync(loginDto);
         return Ok(result);
     }
     
     [HttpPost("register")]
-    public async Task<ActionResult<LoginResponse>> RegisterUser(RegisterUserDto registerUser)
+    //[Authorize(Roles = "Admin")]
+    public async Task<ActionResult<AuthResponseDto>> RegisterUser(UserDetailDto registerUser)
     {
         var result = await _userService.RegisterUserAsync(registerUser);
         return Ok(result);
     }
 
-    [HttpPut("EditUser/{id}")]
+    [HttpPut("edit/{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult> EditUser([FromRoute] string id, EditUserDto editUserDto)
     {

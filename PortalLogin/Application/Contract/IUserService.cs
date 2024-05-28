@@ -6,8 +6,8 @@ namespace Application.Contract;
 
 public interface IUserService
 {
-    Task<RegistrationResponse> RegisterUserAsync(RegisterUserDto registerUserDto);
-    Task<LoginResponse> LoginUserAsync(LoginDto loginDto);
+    Task<AuthResponseDto> RegisterUserAsync(UserDetailDto registerUser);
+    Task<AuthResponseDto> LoginUserAsync(LoginDto loginDto);
     Task<List<ApplicationUser>> GetAllUsersAsync();
     Task<ApplicationUser> GetUserByIdAsync(string id);
     Task<ApplicationUser?> GetCurrentLoggedInUserAsync(HttpContext context);
