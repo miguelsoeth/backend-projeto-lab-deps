@@ -67,5 +67,12 @@ public class AccountController : ControllerBase
         var result = await _userService.GetCurrentLoggedInUserAsync(HttpContext);
         return Ok(result);
     }
+    [HttpPost("refresh-token")]
+    public async Task<ActionResult> refreshToken(TokenDto tokenDto)
+    {
+        var result = await _userService.RefreshToken(tokenDto);
+        return Ok(result);
+    }
+    
     
 }
