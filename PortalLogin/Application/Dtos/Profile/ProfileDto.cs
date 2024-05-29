@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using System.Reflection.PortableExecutable;
 
-namespace Application.Dtos;
+namespace Application.Dtos.Profile;
 
 public class ProfileDto
 {

@@ -1,12 +1,14 @@
 using Application.Dtos;
+using Application.Dtos.Profile;
 
 namespace Application.Contract;
 
 public interface IProfileService
 {
     Task<ProfileResponse> CreateProfileAsync(string userId, ProfileDto profileDto);
-    Task<ListProfileDto> GetUserProfileByIdAsync(Guid userId);
-    Task<EditProfileResponse> EditProfileByIdAsync(Guid id, EditProfileDto editProfileDto);
-    Task<EditProfileResponse> ListProfileByIdAsync(Guid id);
-    Task<EditProfileResponse> DeleteProfileByIdAsync(Guid id);
+    Task<List<ProfileResponse>> GetUserProfilesByIdAsync(Guid userId);
+    Task<ProfileResponse> EditProfileByIdAsync(Guid id, ProfileDto editProfileDto);
+    Task<ProfileResponse> DeleteProfileByIdAsync(Guid id);
+    
+    //Task<EditProfileResponse> ListProfileByIdAsync(Guid id);
 }

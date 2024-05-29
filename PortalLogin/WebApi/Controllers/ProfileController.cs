@@ -1,9 +1,11 @@
 using System.Security.Claims;
 using Application.Contract;
 using Application.Dtos;
+using Application.Dtos.Profile;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.IdentityModel.Tokens;
 
 namespace WebApi.Controllers;
 
@@ -21,7 +23,7 @@ public class ProfileController : ControllerBase
         _contextAccessor = contextAccessor;
     }
 
-    [HttpPost]
+    [HttpPost("create")]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<ProfileResponse>> CreateProfile([FromBody] ProfileDto profileDto)
     {
@@ -32,39 +34,51 @@ public class ProfileController : ControllerBase
         }
 
         var profileResponse = await _profile.CreateProfileAsync(userId, profileDto);
+        
+        if (profileResponse.ProfileName.IsNullOrEmpty()) 
+            return Conflict(profileResponse);
+        
         return Ok(profileResponse);
 
     }
 
-    [HttpPut("{id:guid}")]
+    [HttpPut("edit/{id:guid}")]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult> GetProfileById(Guid id, [FromBody] EditProfileDto editProfileDto)
+    public async Task<ActionResult> EditProfileById(Guid id, [FromBody] ProfileDto editProfileDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
         var result = await _profile.EditProfileByIdAsync(id, editProfileDto);
+        
+        if (result.ProfileName.IsNullOrEmpty()) 
+            return Conflict(result);
+        
         return Ok(result);
     }
 
-    [HttpDelete("{id:guid}")]
+    [HttpDelete("delete/{id:guid}")]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult> DeleteProfileById(Guid id)
     {
         var result = await _profile.DeleteProfileByIdAsync(id);
+        
+        if (result.ProfileName.IsNullOrEmpty()) 
+            return NotFound(result);
+        
         return Ok(result);
 
     }
     
-    [HttpGet("{userId:guid}/profiles")]
+    [HttpGet("user/{userId:guid}")]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult> GetUserProfile(Guid userId)
+    public async Task<ActionResult> GetUserProfiles(Guid userId)
     {
         try
         {
-            var result = await _profile.GetUserProfileByIdAsync(userId);
-            return Ok(result.Profiles);
+            var result = await _profile.GetUserProfilesByIdAsync(userId);
+            return Ok(result);
         }
         catch (KeyNotFoundException)
         {

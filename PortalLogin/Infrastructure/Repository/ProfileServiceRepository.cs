@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Application.Contract;
 using Application.Dtos;
+using Application.Dtos.Profile;
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Http;
@@ -39,7 +40,10 @@ public class ProfileServiceRepository : IProfileService
         }
 
         var nameExist = await _appDbContext.Profiles.AnyAsync(u => u.ProfileName == profileDto.ProfileName);
-        if(nameExist) throw new BadHttpRequestException("Já existe um perfil com este nome");
+        if (nameExist) return new ProfileResponse
+        {
+            Message = "Já existe um perfil com esse nome!"
+        };
 
         var profile = new Profiles
         {
@@ -56,41 +60,42 @@ public class ProfileServiceRepository : IProfileService
             Id = profile.Id,
             ProfileName = profileDto.ProfileName,
             UserId = profile.UserId,
-            UserName = user.Name
+            Message = "Usuário criado com sucesso!"
         };
     }
 
-    public async Task<ListProfileDto> GetUserProfileByIdAsync(Guid userId)
+    public async Task<List<ProfileResponse>> GetUserProfilesByIdAsync(Guid userId)
     {
         var user = await _appDbContext.Users
             .Include(u => u.Profiles)
             .FirstOrDefaultAsync(u => u.Id == userId);
         if (user == null)
         {
-            throw new KeyNotFoundException("Perfil não encontrado");
+            throw new KeyNotFoundException("Usuário não encontrado.");
         }
 
-        var userProfileDto = new ListProfileDto
-        {
-            Profiles = user.Profiles.Select(p => new ListUserProfileDto
+        var res = user.Profiles!.Select(
+            p => new ProfileResponse
             {
-                idProfile = p.Id,
-                ProfileName = p.ProfileName
-            }).ToList()
-        };
+                Id = p.Id, 
+                UserId = p.UserId, 
+                ProfileName = p.ProfileName!
+            }
+        ).ToList();
 
-        return userProfileDto;
+        return res;
 
     }
 
-    public async Task<EditProfileResponse> EditProfileByIdAsync(Guid id, EditProfileDto editProfileDto)
+    public async Task<ProfileResponse> EditProfileByIdAsync(Guid id, ProfileDto editProfileDto)
     {
-        var response = new EditProfileResponse();
         var existingProfile = await _appDbContext.Profiles.FindAsync(id);
         if (existingProfile == null)
         {
-            response.Message = "Perfil não encontrado";
-            return response;
+            return new ProfileResponse
+            {
+                Message = "Perfil não encontrado"
+            };
         }
     
 
@@ -102,8 +107,10 @@ public class ProfileServiceRepository : IProfileService
         
             if (existingProfileWithSameName != null)
             {
-                response.Message = "Já tem um perfil com este nome";
-                return response;
+                return new ProfileResponse
+                {
+                    Message = "Já existe um perfil com este nome"
+                };
             }
         }
         
@@ -111,10 +118,17 @@ public class ProfileServiceRepository : IProfileService
 
         await _appDbContext.SaveChangesAsync();
 
-        response.Message = "Perfil Atualizado com sucesso";
-        return response;
+        return new ProfileResponse
+        {
+            Id = existingProfile.Id,
+            UserId = existingProfile.UserId,
+            ProfileName = editProfileDto.ProfileName,
+            Message = "Perfil Atualizado com sucesso"
+        };
     }
 
+    #region LIST PROFILES BY ID (NOT USED)
+    /*
     public async Task<EditProfileResponse> ListProfileByIdAsync(Guid id)
     {
         var existingProfile = await _appDbContext.Profiles.FindAsync(id);
@@ -133,13 +147,17 @@ public class ProfileServiceRepository : IProfileService
             Message = "Perfil encontrado!"
         };
     }
+    */
+    
 
-    public async Task<EditProfileResponse> DeleteProfileByIdAsync(Guid id)
+    #endregion
+    
+    public async Task<ProfileResponse> DeleteProfileByIdAsync(Guid id)
     {
         var existingProfile = await _appDbContext.Profiles.FindAsync(id);
         if (existingProfile == null)
         {
-            return new EditProfileResponse
+            return new ProfileResponse
             {
                 Message = "Perfil não encontrado"
             };
@@ -148,8 +166,11 @@ public class ProfileServiceRepository : IProfileService
         _appDbContext.Profiles.Remove(existingProfile);
         await _appDbContext.SaveChangesAsync();
 
-        return new EditProfileResponse
+        return new ProfileResponse
         {
+            Id = existingProfile.Id,
+            ProfileName = existingProfile.ProfileName!,
+            UserId = existingProfile.UserId,
             Message = "Perfil deletado com sucesso"
         };
     }

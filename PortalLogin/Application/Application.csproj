@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Dtos\Profile\" />
+      <Folder Include="COnsultaSerproService\" />
     </ItemGroup>
 
 </Project>
