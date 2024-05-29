@@ -41,6 +41,7 @@ public static class ServiceContainer
         });
         services.AddScoped<IUserService, UserServiceRepository>();
         services.AddScoped<IProfileService, ProfileServiceRepository>();
+        services.AddScoped<ICreditService, CreditServiceRepository>();
         return services;
     }
 }
