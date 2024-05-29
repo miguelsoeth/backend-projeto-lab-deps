@@ -14,4 +14,5 @@ public class ApplicationUser
     
     //Relações da tabela
     public ICollection<Profiles>? Profiles { get; set; }
+    public ICollection<Credit>? Credits { get; set; }
 }

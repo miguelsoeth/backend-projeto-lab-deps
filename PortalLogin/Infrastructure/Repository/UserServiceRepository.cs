@@ -327,8 +327,6 @@ public class UserServiceRepository : IUserService
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Jwt").GetSection("Key").Value!)),
             ValidateLifetime = false
-
-
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();
