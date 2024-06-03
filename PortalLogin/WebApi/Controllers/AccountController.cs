@@ -22,6 +22,10 @@ public class AccountController : ControllerBase
     public async Task<ActionResult<AuthResponseDto>> LogUserIn(LoginDto loginDto)
     {
         var result = await _userService.LoginUserAsync(loginDto);
+        if (result.IsSuccess == false)
+        {
+            return BadRequest(result);
+        }
         return Ok(result);
     }
     

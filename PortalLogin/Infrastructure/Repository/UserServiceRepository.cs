@@ -211,7 +211,7 @@ public class UserServiceRepository : IUserService
         };
 
         var userEmailClaim = _contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Email);
-        var userNameClaim = _contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Name);
+        var userNameClaim = _contextAccessor.HttpContext?.User.FindFirst(JwtRegisteredClaimNames.Name);
 
         if (userEmailClaim != null && userNameClaim != null)
         {
@@ -241,7 +241,7 @@ public class UserServiceRepository : IUserService
 
         return null;
     }
-    
+    /*
     public string GenerateJwtToken(ApplicationUser user)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -249,9 +249,9 @@ public class UserServiceRepository : IUserService
 
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Name, user.Name),
-            new Claim(ClaimTypes.Email, user.Email)
+            new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Name, user.Name),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email)
         };
         
         if (user.Roles != null)
@@ -272,7 +272,43 @@ public class UserServiceRepository : IUserService
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
-    
+    */
+    public string GenerateJwtToken(ApplicationUser user){
+        var tokenHandler = new JwtSecurityTokenHandler();
+            
+        var key = Encoding.ASCII
+            .GetBytes(_configuration.GetSection("Jwt").GetSection("Key").Value!);
+
+        List<Claim> claims = 
+        [
+            new (JwtRegisteredClaimNames.Email,user.Email??""),
+            new (JwtRegisteredClaimNames.Name,user.Name??""),
+            new (JwtRegisteredClaimNames.NameId,user.Id.ToString()),
+            new (JwtRegisteredClaimNames.Aud,
+                _configuration.GetSection("Jwt").GetSection("Audience").Value!),
+            new (JwtRegisteredClaimNames.Iss,_configuration.GetSection("Jwt").GetSection("Issuer").Value!)
+        ];
+
+
+        foreach(var role in user.Roles!)
+
+        {
+            claims.Add(new Claim(ClaimTypes.Role,role));
+        }
+
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(claims),
+            Expires = DateTime.UtcNow.AddMinutes(30),
+            SigningCredentials = new SigningCredentials(
+                new SymmetricSecurityKey(key),
+                SecurityAlgorithms.HmacSha256
+            )
+        };
+
+        var token  = tokenHandler.CreateToken(tokenDescriptor);
+        return tokenHandler.WriteToken(token);
+    }
     
     private string GenerateRefreshToken()
     {
@@ -281,8 +317,6 @@ public class UserServiceRepository : IUserService
         rng.GetBytes(randomNumber);
         return Convert.ToBase64String(randomNumber);
     }
-    
-    
     
     private ClaimsPrincipal? GetPrincipalFromExpiredToken(string token)
     {
