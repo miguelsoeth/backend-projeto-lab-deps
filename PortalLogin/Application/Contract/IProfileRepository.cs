@@ -3,7 +3,7 @@ using Application.Dtos.Profile;
 
 namespace Application.Contract;
 
-public interface IProfileService
+public interface IProfileRepository
 {
     Task<ProfileResponse> CreateProfileAsync(string userId, ProfileDto profileDto);
     Task<List<ProfileResponse>> GetUserProfilesByIdAsync(Guid userId);

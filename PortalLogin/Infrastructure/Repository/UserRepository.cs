@@ -19,13 +19,13 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Repository;
 
-public class UserServiceRepository : IUserService
+public class UserRepository : IUserRepository
 {
     private readonly AppDbContext _appDbContext;
     private readonly IConfiguration _configuration;
     private readonly IHttpContextAccessor _contextAccessor;
 
-    public UserServiceRepository(AppDbContext appDbContext, IConfiguration configuration,
+    public UserRepository(AppDbContext appDbContext, IConfiguration configuration,
         IHttpContextAccessor contextAccessor)
     {
         _appDbContext = appDbContext;

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Application.Contract;
 
-public interface IUserService
+public interface IUserRepository
 {
     Task<AuthResponseDto> RegisterUserAsync(UserDetailDto registerUser);
     Task<AuthResponseDto> LoginUserAsync(LoginDto loginDto);

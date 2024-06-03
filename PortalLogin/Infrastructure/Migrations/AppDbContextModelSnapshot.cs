@@ -80,6 +80,23 @@ namespace Infrastructure.Migrations
                     b.ToTable("Credits");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Products", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Descricao")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Produtos");
+                });
+
             modelBuilder.Entity("Domain.Entities.Profiles", b =>
                 {
                     b.Property<Guid>("Id")
@@ -97,6 +114,30 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Profiles");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Venda", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Vendas");
                 });
 
             modelBuilder.Entity("Domain.Entities.Credit", b =>
@@ -121,11 +162,37 @@ namespace Infrastructure.Migrations
                     b.Navigation("applicationUser");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Venda", b =>
+                {
+                    b.HasOne("Domain.Entities.Products", "Product")
+                        .WithMany("Vendas")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.ApplicationUser", "User")
+                        .WithMany("Vendas")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Domain.Entities.ApplicationUser", b =>
                 {
                     b.Navigation("Credits");
 
                     b.Navigation("Profiles");
+
+                    b.Navigation("Vendas");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Products", b =>
+                {
+                    b.Navigation("Vendas");
                 });
 #pragma warning restore 612, 618
         }

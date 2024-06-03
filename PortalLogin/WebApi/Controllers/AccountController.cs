@@ -11,17 +11,17 @@ namespace WebApi.Controllers;
 [ApiController]
 public class AccountController : ControllerBase
 {
-    private readonly IUserService _userService;
+    private readonly IUserRepository _userRepository;
 
-    public AccountController(IUserService userService)
+    public AccountController(IUserRepository userRepository)
     {
-        _userService = userService;
+        _userRepository = userRepository;
     }
 
     [HttpPost("login")]
     public async Task<ActionResult<AuthResponseDto>> LogUserIn(LoginDto loginDto)
     {
-        var result = await _userService.LoginUserAsync(loginDto);
+        var result = await _userRepository.LoginUserAsync(loginDto);
         if (result.IsSuccess == false)
         {
             return BadRequest(result);
@@ -33,7 +33,7 @@ public class AccountController : ControllerBase
     //[Authorize(Roles = "Admin")]
     public async Task<ActionResult<AuthResponseDto>> RegisterUser(UserDetailDto registerUser)
     {
-        var result = await _userService.RegisterUserAsync(registerUser);
+        var result = await _userRepository.RegisterUserAsync(registerUser);
         return Ok(result);
     }
 
@@ -41,7 +41,7 @@ public class AccountController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<AuthResponseDto>> EditUser([FromRoute] string id, UserDetailDto editUserDto)
     {
-        var result = await _userService.EditUserAsync(id, editUserDto);
+        var result = await _userRepository.EditUserAsync(id, editUserDto);
         return Ok(result);
     }
     
@@ -49,7 +49,7 @@ public class AccountController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult> GetUserById(string id)
     {
-        var result = await _userService.GetUserByIdAsync(id);
+        var result = await _userRepository.GetUserByIdAsync(id);
         if (result == null) return NotFound(result);
         return Ok(result);
     }
@@ -58,7 +58,7 @@ public class AccountController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<IEnumerable<UserDetailDto>>> AllUsers()
     {
-        var result = await _userService.GetAllUsersAsync();
+        var result = await _userRepository.GetAllUsersAsync();
         return Ok(result);
     }
     
@@ -66,13 +66,13 @@ public class AccountController : ControllerBase
     [Authorize]
     public async Task<ActionResult<UserDetailDto>> GetCurrentUser()
     {
-        var result = await _userService.GetCurrentLoggedInUserAsync(HttpContext);
+        var result = await _userRepository.GetCurrentLoggedInUserAsync(HttpContext);
         return Ok(result);
     }
     [HttpPost("refresh-token")]
     public async Task<ActionResult> refreshToken(TokenDto tokenDto)
     {
-        var result = await _userService.RefreshToken(tokenDto);
+        var result = await _userRepository.RefreshToken(tokenDto);
         return Ok(result);
     }
     

@@ -9,11 +9,11 @@ namespace WebApi.Controllers;
 //[Authorize(Roles = "Admin" )]
 public class CreditsController : ControllerBase
 {
-    private readonly ICreditService _creditService;
+    private readonly ICreditRepository _creditRepository;
 
-    public CreditsController(ICreditService creditService)
+    public CreditsController(ICreditRepository creditRepository)
     {
-        _creditService = creditService;
+        _creditRepository = creditRepository;
     }
 
 
@@ -24,7 +24,7 @@ public class CreditsController : ControllerBase
         {
             return BadRequest("Insira um valor maior que 0!");
         }
-        var result = await _creditService.IncreaseCreditAsync(userId, amount);
+        var result = await _creditRepository.IncreaseCreditAsync(userId, amount);
         return Ok(result);
     }
 
@@ -35,7 +35,7 @@ public class CreditsController : ControllerBase
         {
             return BadRequest("Insira um valor maior que 0!");
         }
-        var result = await _creditService.DecreaseCreditAsync(userId, amount);
+        var result = await _creditRepository.DecreaseCreditAsync(userId, amount);
         return Ok(result);
     }
     

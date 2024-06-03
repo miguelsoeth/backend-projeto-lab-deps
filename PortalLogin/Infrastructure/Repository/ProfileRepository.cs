@@ -10,13 +10,13 @@ using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Repository;
 
-public class ProfileServiceRepository : IProfileService
+public class ProfileRepository : IProfileRepository
 {
 
     private readonly AppDbContext _appDbContext;
     private readonly IHttpContextAccessor _contextAccessor;
 
-    public ProfileServiceRepository(IHttpContextAccessor contextAccessor, AppDbContext appDbContext)
+    public ProfileRepository(IHttpContextAccessor contextAccessor, AppDbContext appDbContext)
     {
         _contextAccessor = contextAccessor;
         _appDbContext = appDbContext;

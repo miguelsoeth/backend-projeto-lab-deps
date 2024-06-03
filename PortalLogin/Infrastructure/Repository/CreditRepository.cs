@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repository;
 
-public class CreditServiceRepository : ICreditService
+public class CreditRepository : ICreditRepository
 {
 
     private readonly AppDbContext _appDbContext;
 
-    public CreditServiceRepository(AppDbContext appDbContext)
+    public CreditRepository(AppDbContext appDbContext)
     {
         _appDbContext = appDbContext;
     }

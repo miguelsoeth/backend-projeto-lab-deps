@@ -14,10 +14,10 @@ namespace WebApi.Controllers;
 [Authorize]
 public class ProfileController : ControllerBase
 {
-    private readonly IProfileService _profile;
+    private readonly IProfileRepository _profile;
     private readonly IHttpContextAccessor _contextAccessor;
 
-    public ProfileController(IProfileService profile, IHttpContextAccessor contextAccessor)
+    public ProfileController(IProfileRepository profile, IHttpContextAccessor contextAccessor)
     {
         _profile = profile;
         _contextAccessor = contextAccessor;
