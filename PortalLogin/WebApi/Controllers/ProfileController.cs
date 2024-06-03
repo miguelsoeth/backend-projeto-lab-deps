@@ -23,16 +23,10 @@ public class ProfileController : ControllerBase
         _contextAccessor = contextAccessor;
     }
 
-    [HttpPost("create")]
+    [HttpPost("create/{userId:guid}")]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<ProfileResponse>> CreateProfile([FromBody] ProfileDto profileDto)
+    public async Task<ActionResult<ProfileResponse>> CreateProfile([FromBody] ProfileDto profileDto, Guid userId)
     {
-        var userId = _contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (userId == null)
-        {
-            throw new UnauthorizedAccessException("User is not Authenticated");
-        }
-
         var profileResponse = await _profile.CreateProfileAsync(userId, profileDto);
         
         if (profileResponse.ProfileName.IsNullOrEmpty()) 
