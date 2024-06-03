@@ -150,7 +150,7 @@ public class UserServiceRepository : IUserService
             user.Password = editUserDto.Password;
         }
         
-        if (!string.IsNullOrEmpty(editUserDto.Email))
+        if (!string.IsNullOrEmpty(editUserDto.Email) && user.Email != editUserDto.Email)
         {
             var emailExists = await _appDbContext.Users.AnyAsync(u => u.Email == editUserDto.Email);
             if (emailExists) return new AuthResponseDto
