@@ -22,27 +22,23 @@ public class ProfileRepository : IProfileRepository
         _appDbContext = appDbContext;
     }
 
-    public async Task<ProfileResponse> CreateProfileAsync(string userId, ProfileDto profileDto)
+    public async Task<ProfileResponse> CreateProfileAsync(Guid userId, ProfileDto profileDto)
     {
-        var userIdClaim = _contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var userNameClaim = _contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Name)?.Value;
 
-        if (userIdClaim == null && userNameClaim == null)
-        {
-            throw new UnauthorizedAccessException("Usuário não autenticado");
-        }
-
-        var user = await _appDbContext.Users.FindAsync(Guid.Parse(userIdClaim));
+        var user = await _appDbContext.Users.FindAsync(userId);
 
         if (user == null)
         {
-            throw new Exception("Usuário não encontrado");
+            return new ProfileResponse
+            {
+                Message = "Usuário não encontrado!"
+            };
         }
 
-        var nameExist = await _appDbContext.Profiles.AnyAsync(u => u.ProfileName == profileDto.ProfileName);
+        var nameExist = await _appDbContext.Profiles.AnyAsync(u => u.ProfileName == profileDto.ProfileName && u.UserId == userId );
         if (nameExist) return new ProfileResponse
         {
-            Message = "Já existe um perfil com esse nome!"
+            Message = "Esse usuário já possui um perfil com esse nome!"
         };
 
         var profile = new Profiles
@@ -89,39 +85,42 @@ public class ProfileRepository : IProfileRepository
 
     public async Task<ProfileResponse> EditProfileByIdAsync(Guid id, ProfileDto editProfileDto)
     {
-        var existingProfile = await _appDbContext.Profiles.FindAsync(id);
-        if (existingProfile == null)
+        var profile = await _appDbContext.Profiles.FindAsync(id);
+        if (profile == null)
         {
             return new ProfileResponse
             {
                 Message = "Perfil não encontrado"
             };
         }
-    
 
-        if (existingProfile.ProfileName == editProfileDto.ProfileName)
+        if (profile.ProfileName == editProfileDto.ProfileName)
         {
-
-            var existingProfileWithSameName = await _appDbContext.Profiles
-                .FirstOrDefaultAsync(u => u.ProfileName == editProfileDto.ProfileName);
-        
-            if (existingProfileWithSameName != null)
+            return new ProfileResponse
             {
-                return new ProfileResponse
-                {
-                    Message = "Já existe um perfil com este nome"
-                };
-            }
+                Message = "Nome não alterado!"
+            };
         }
         
-        existingProfile.ProfileName = editProfileDto.ProfileName;
+        var sameNameProfile = await _appDbContext.Profiles
+            .FirstOrDefaultAsync(u => u.ProfileName == editProfileDto.ProfileName && u.UserId == Guid.Parse(editProfileDto.userId));
+        
+        if (sameNameProfile != null)
+        {
+            return new ProfileResponse
+            {
+                Message = "Já existe um perfil com este nome"
+            };
+        }
+        
+        profile.ProfileName = editProfileDto.ProfileName;
 
         await _appDbContext.SaveChangesAsync();
 
         return new ProfileResponse
         {
-            Id = existingProfile.Id,
-            UserId = existingProfile.UserId,
+            Id = profile.Id,
+            UserId = profile.UserId,
             ProfileName = editProfileDto.ProfileName,
             Message = "Perfil Atualizado com sucesso"
         };
