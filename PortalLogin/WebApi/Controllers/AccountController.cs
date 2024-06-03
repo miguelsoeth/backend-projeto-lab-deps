@@ -12,12 +12,10 @@ namespace WebApi.Controllers;
 public class AccountController : ControllerBase
 {
     private readonly IUserService _userService;
-    private readonly AppDbContext _appDbContext;
 
-    public AccountController(IUserService userService, AppDbContext appDbContext)
+    public AccountController(IUserService userService)
     {
         _userService = userService;
-        _appDbContext = appDbContext;
     }
 
     [HttpPost("login")]
