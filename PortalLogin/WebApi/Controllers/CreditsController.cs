@@ -15,12 +15,22 @@ public class CreditsController : ControllerBase
     {
         _creditRepository = creditRepository;
     }
+    
+    [HttpGet("get/{userId}")]
+    public async Task<ActionResult> GetUserCredits(Guid userId)
+    {
+        var result = await _creditRepository.GetCreditAsync(userId);
+        if (result.UserId == null)
+        {
+            return NotFound(result);
+        }
+        return Ok(result);
+    }
 
-
-    [HttpPut("Increase/{userId}")]
+    [HttpPut("increase/{userId}")]
     public async Task<ActionResult> IncreaseCredits(Guid userId, decimal amount)
     {
-        if (amount < 0)
+        if (amount <= 0)
         {
             return BadRequest("Insira um valor maior que 0!");
         }

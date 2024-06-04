@@ -1,5 +1,6 @@
 using Application.Contract;
 using Application.Dtos.Account;
+using Application.Dtos.Credits;
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,27 @@ public class CreditRepository : ICreditRepository
     public CreditRepository(AppDbContext appDbContext)
     {
         _appDbContext = appDbContext;
+    }
+
+    public async Task<CreditDto> GetCreditAsync(Guid userId)
+    {
+        var user = await _appDbContext.Users.Include(u => u.Credits).FirstOrDefaultAsync(u => u.Id == userId);
+        if (user == null)
+        {
+            return new CreditDto
+            {
+                UserId = null,
+                Message = "Usuário não encontrado!"
+            };
+        }
+        
+        var currentCredit = user.Credits.FirstOrDefault();
+        return new CreditDto
+        {
+            UserId = user.Id,
+            Amount = currentCredit?.Amount ?? 0,
+            Message = "Créditos recuperados!"
+        };
     }
 
     public async Task<AuthResponseDto> IncreaseCreditAsync(Guid userId, decimal amount)
