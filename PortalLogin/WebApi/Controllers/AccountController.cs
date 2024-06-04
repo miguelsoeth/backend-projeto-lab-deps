@@ -72,7 +72,16 @@ public class AccountController : ControllerBase
     [HttpPost("refresh-token")]
     public async Task<ActionResult> refreshToken(TokenDto tokenDto)
     {
+        if(!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         var result = await _userRepository.RefreshToken(tokenDto);
+        if (result.IsSuccess == false)
+        {
+            return BadRequest(result);
+        }
         return Ok(result);
     }
     
