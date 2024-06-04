@@ -43,6 +43,7 @@ public static class ServiceContainer
         services.AddScoped<IProfileRepository, ProfileRepository>();
         services.AddScoped<ICreditRepository, CreditRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IVendaRepository, VendaRepository>();
         return services;
     }
 }

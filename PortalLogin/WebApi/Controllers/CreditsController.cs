@@ -15,8 +15,7 @@ public class CreditsController : ControllerBase
     {
         _creditRepository = creditRepository;
     }
-
-
+    
     [HttpPut("Increase/{userId}")]
     public async Task<ActionResult> IncreaseCredits(Guid userId, decimal amount)
     {
