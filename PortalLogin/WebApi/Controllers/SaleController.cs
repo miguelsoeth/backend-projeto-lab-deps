@@ -40,4 +40,17 @@ public class SaleController : ControllerBase
   }
   
   
+  [HttpGet("GetSales")]
+  public async Task<ActionResult> GetAllSalesByIdUser(string id)
+  {
+    if (!Guid.TryParse(id, out Guid userGuid))
+    {
+      return BadRequest("O formato do id é inválido");
+    }
+    var result = await _vendaRepository.GetSaleByUserId(userGuid);
+    if (result == null) return BadRequest("Erro ao buscas as vendas");
+    return Ok(result);
+  }
+  
+  
 }
