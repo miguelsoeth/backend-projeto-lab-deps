@@ -4,7 +4,6 @@ using Application.Dtos.Account;
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repository;
 
@@ -70,26 +69,5 @@ public class VendaRepository : IVendaRepository
         _appDbContext.Vendas.Update(venda);
         await _appDbContext.SaveChangesAsync();
         return new AuthResponseDto { IsSuccess = true, Message = "Venda editada com sucesso!"};
-    }
-
-    public async Task<List<SaleDto>> GetSaleByUserId(Guid id)
-    {
-        var user = await _appDbContext.Users.FindAsync(id);
-        if (user == null) return null;
-        
-        var vendas = await _appDbContext.Vendas
-            .Where(v => v.UserId == id)
-            .Select(v => new SaleDto
-            {
-                UserId = v.UserId,
-                ProductId = v.ProductId,
-                Valor = v.Valor
-            })
-            .ToListAsync();
-
-        if (vendas == null || !vendas.Any())
-            return null;
-        
-        return vendas;
     }
 }
