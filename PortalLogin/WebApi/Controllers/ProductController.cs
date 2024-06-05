@@ -22,20 +22,24 @@ public class ProductController : ControllerBase
     public async Task<ActionResult> CreateProduct([FromBody] ProductDto productDto)
     {
         var response = await _productRepository.CreateProductsAsync(productDto);
-        return Ok(response);
+        if (response.IsSuccess == false) return BadRequest(response.Message);
+        return Ok(response.Message);
     }
 
     [HttpPut("EditProducts")]
     public async Task<ActionResult> EditProduct(Guid id, [FromBody] ProductDto productDto)
     {
         var response = await _productRepository.EditProductAsync(id, productDto);
-        return Ok(response);
+        if (response.IsSuccess == false) return BadRequest(response.Message);
+        return Ok(response.Message);
     }
 
     [HttpDelete("DeleteProducts/{id}")]
     public async Task<ActionResult> DeleteProduct(Guid id)
     {
         var response = await _productRepository.DeleteProductAsync(id);
+        if (response.IsSuccess == false) return BadRequest(response.Message);
+            
         return Ok(response);
     }
 

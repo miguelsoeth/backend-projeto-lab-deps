@@ -9,4 +9,5 @@ public interface IVendaRepository
 {
     Task<AuthResponseDto> CreateSaleAsync(SaleDto sale);
     Task<AuthResponseDto> EditSaleAsync(string id, SaleDto sale);
+    Task<List<SaleDto>> GetSaleByUserId(Guid id);
 }
