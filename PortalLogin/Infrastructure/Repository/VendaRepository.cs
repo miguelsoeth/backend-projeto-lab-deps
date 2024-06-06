@@ -81,14 +81,14 @@ public class VendaRepository : IVendaRepository
             .Where(v => v.UserId == id)
             .Select(v => new SaleDto
             {
-                UserId = v.UserId,
+                SaleId = v.Id,
                 ProductId = v.ProductId,
-                Valor = v.Valor
+                ProductName = v.Product.Name,
+                ProductDescription = v.Product.Descricao,
+                Valor = v.Valor,
+                
             })
             .ToListAsync();
-
-        if (vendas == null || !vendas.Any())
-            return null;
         
         return vendas;
     }
