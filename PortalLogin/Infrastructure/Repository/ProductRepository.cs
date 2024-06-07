@@ -39,7 +39,8 @@ public class ProductRepository : IProductRepository
         {
             Id = Guid.NewGuid(),
             Name = productDto.Nome,
-            Descricao = productDto.Descicao
+            Descricao = productDto.Descicao,
+            IsActive = true
         };
 
         _appDbContext.Produtos.Add(product);
@@ -82,6 +83,8 @@ public class ProductRepository : IProductRepository
         {
             product.Descricao = productDto.Descicao;
         }
+
+        product.IsActive = productDto.IsActive;
 
         _appDbContext.Produtos.Update(product);
         await _appDbContext.SaveChangesAsync();
