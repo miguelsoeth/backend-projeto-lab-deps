@@ -17,6 +17,26 @@ public class VendaRepository : IVendaRepository
         _appDbContext = appDbContext;
     }
 
+    private async Task<string> GenerateNewSaleNameAsync()
+    {
+        var lastSale = await _appDbContext.Vendas
+            .OrderByDescending(v => v.Name)
+            .FirstOrDefaultAsync();
+
+        int newSequencial = 1;
+
+        if (lastSale != null)
+        {
+            string lastName = lastSale.Name;
+            if (lastName.StartsWith("Deps ") && int.TryParse(lastName.Substring(5), out int lastSequencial))
+            {
+                newSequencial = lastSequencial + 1;
+            }
+        }
+
+        return $"Deps {newSequencial:000}";
+    }
+
     public async Task<AuthResponseDto> CreateSaleAsync(SaleDto sale)
     {
         var produto = await _appDbContext.Produtos.FindAsync(sale.ProductId);
@@ -36,8 +56,11 @@ public class VendaRepository : IVendaRepository
                 Message = reason
             };
 
+        string newName = await GenerateNewSaleNameAsync();
+
         _appDbContext.Vendas.Add(new Venda()
         {
+            Name = newName,
             UserId = sale.UserId,
             ProductId = sale.ProductId,
             Valor = sale.Valor,
