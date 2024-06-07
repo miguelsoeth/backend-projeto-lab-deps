@@ -8,6 +8,7 @@ namespace Application.Contract;
 public interface IVendaRepository
 {
     Task<AuthResponseDto> CreateSaleAsync(SaleDto sale);
-    Task<AuthResponseDto> EditSaleAsync(string id, SaleDto sale);
+    Task<AuthResponseDto> DisableSaleAsync(string id, bool isActive);
+    Task<AuthResponseDto> DeleteSaleAsync(string id);
     Task<List<SaleDto>> GetSaleByUserId(Guid id);
 }

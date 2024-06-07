@@ -24,6 +24,10 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Profiles>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
+        
+        modelBuilder.Entity<Venda>()
+            .Property(v => v.isActive)
+            .HasDefaultValue(true);
 
         modelBuilder.Entity<ApplicationUser>()
             .HasMany(u => u.Profiles)

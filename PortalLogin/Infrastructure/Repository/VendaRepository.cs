@@ -40,7 +40,8 @@ public class VendaRepository : IVendaRepository
         {
             UserId = sale.UserId,
             ProductId = sale.ProductId,
-            Valor = sale.Valor
+            Valor = sale.Valor,
+            isActive = true
         });
         await _appDbContext.SaveChangesAsync();
 
@@ -48,30 +49,34 @@ public class VendaRepository : IVendaRepository
 
     }
 
-    public async Task<AuthResponseDto> EditSaleAsync(string id, SaleDto sale)
+    public async Task<AuthResponseDto> DisableSaleAsync(string id, bool isActive)
     {
-        var venda = await _appDbContext.Vendas.FindAsync(id);
-        if (venda == null) return new AuthResponseDto { IsSuccess = false, Message = "Venda não encotrado" };
+        var venda = await _appDbContext.Vendas.FindAsync(Guid.Parse(id));
+        if (venda == null) return new AuthResponseDto { IsSuccess = false, Message = "Venda não encotrada" };
         
-        string? reason = null;
-        if (sale.UserId == Guid.Empty) reason = "Obrigatório informa o usuário!";
-        if (sale.ProductId == Guid.Empty) reason = "Obrigatório informar o produto!";
-        if (sale.Valor == null) reason = "Obrigatório infomar o valor do produto!";
-        if (reason != null) return new AuthResponseDto
+        if (isActive == null) return new AuthResponseDto
         {
             IsSuccess = false,
-            Message = reason
+            Message = "Obrigatório infomar o estado do produto!"
         };
-
-        if (!string.IsNullOrEmpty(sale.UserId.ToString())) venda.UserId = sale.UserId;
-        if (!string.IsNullOrEmpty(sale.ProductId.ToString())) venda.ProductId = sale.ProductId;
-        if (!string.IsNullOrEmpty(sale.Valor.ToString())) venda.Valor = sale.Valor;
+        
+        venda.isActive = isActive;
 
         _appDbContext.Vendas.Update(venda);
         await _appDbContext.SaveChangesAsync();
         return new AuthResponseDto { IsSuccess = true, Message = "Venda editada com sucesso!"};
     }
-    
+
+    public async Task<AuthResponseDto> DeleteSaleAsync(string id)
+    {
+        var venda = await _appDbContext.Vendas.FindAsync(Guid.Parse(id));
+        if (venda == null) return new AuthResponseDto { IsSuccess = false, Message = "Venda não encotrada" };
+
+        _appDbContext.Vendas.Remove(venda);
+        await _appDbContext.SaveChangesAsync();
+        return new AuthResponseDto { IsSuccess = true, Message = "Venda removida com sucesso!"};
+    }
+
     public async Task<List<SaleDto>> GetSaleByUserId(Guid id)
     {
         var user = await _appDbContext.Users.FindAsync(id);
@@ -85,6 +90,7 @@ public class VendaRepository : IVendaRepository
                 ProductId = v.ProductId,
                 ProductName = v.Product.Name,
                 ProductDescription = v.Product.Descricao,
+                ProductActive = v.isActive,
                 Valor = v.Valor,
                 
             })

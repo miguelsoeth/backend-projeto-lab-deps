@@ -9,6 +9,8 @@ public class Venda
     public Guid ProductId { get; set; }
     public decimal Valor { get; set; } = 0.0m;
     
+    public bool isActive { get; set; }
+    
     public ApplicationUser User { get; set; }
     public Products Product { get; set; }  
     

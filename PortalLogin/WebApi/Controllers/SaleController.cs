@@ -28,10 +28,21 @@ public class SaleController : ControllerBase
     return Ok(result);
   }
 
-  [HttpPut("EditSale/{id}")]
-  public async Task<ActionResult> EditSale(string id, SaleDto sale)
+  [HttpPut("disable/{id}")]
+  public async Task<ActionResult> DisableSale(string id, bool isActive)
   {
-    var result = await _vendaRepository.EditSaleAsync(id, sale);
+    var result = await _vendaRepository.DisableSaleAsync(id, isActive);
+    if (result.IsSuccess == false)
+    {
+      return BadRequest(result);
+    }
+    return Ok(result);
+  }
+    
+  [HttpDelete("delete/{id}")]
+  public async Task<ActionResult> DeleteSale(string id)
+  {
+    var result = await _vendaRepository.DeleteSaleAsync(id);
     if (result.IsSuccess == false)
     {
       return BadRequest(result);
