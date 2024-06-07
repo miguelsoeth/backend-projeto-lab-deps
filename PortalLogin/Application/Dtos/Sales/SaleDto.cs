@@ -3,6 +3,7 @@ namespace Application.Dtos;
 public class SaleDto
 {
     public Guid SaleId { get; set; }
+    public string? SaleName { get; set; }
     public Guid UserId { get; set; }
     public Guid ProductId { get; set; }
     public string ProductName { get; set; }

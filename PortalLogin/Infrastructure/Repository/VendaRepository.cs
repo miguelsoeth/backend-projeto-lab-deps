@@ -110,6 +110,7 @@ public class VendaRepository : IVendaRepository
             .Select(v => new SaleDto
             {
                 SaleId = v.Id,
+                SaleName = v.Name,
                 ProductId = v.ProductId,
                 ProductName = v.Product.Name,
                 ProductDescription = v.Product.Descricao,
