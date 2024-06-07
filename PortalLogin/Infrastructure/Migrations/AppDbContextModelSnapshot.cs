@@ -131,6 +131,11 @@ namespace Infrastructure.Migrations
                     b.Property<decimal>("Valor")
                         .HasColumnType("numeric");
 
+                    b.Property<bool>("isActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");

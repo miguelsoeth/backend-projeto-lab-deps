@@ -24,7 +24,7 @@ public class ProfileController : ControllerBase
     }
 
     [HttpPost("create/{userId:guid}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public async Task<ActionResult<ProfileResponse>> CreateProfile([FromBody] ProfileDto profileDto, Guid userId)
     {
         var profileResponse = await _profile.CreateProfileAsync(userId, profileDto);
@@ -37,7 +37,7 @@ public class ProfileController : ControllerBase
     }
 
     [HttpPut("edit/{id:guid}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public async Task<ActionResult> EditProfileById(Guid id, [FromBody] ProfileDto editProfileDto)
     {
         if (!ModelState.IsValid)
@@ -53,7 +53,7 @@ public class ProfileController : ControllerBase
     }
 
     [HttpDelete("delete/{id:guid}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public async Task<ActionResult> DeleteProfileById(Guid id)
     {
         var result = await _profile.DeleteProfileByIdAsync(id);
@@ -66,7 +66,7 @@ public class ProfileController : ControllerBase
     }
     
     [HttpGet("user/{userId:guid}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public async Task<ActionResult> GetUserProfiles(Guid userId)
     {
         try
