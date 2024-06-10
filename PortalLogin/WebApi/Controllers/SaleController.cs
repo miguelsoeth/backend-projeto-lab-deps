@@ -58,7 +58,8 @@ public class SaleController : ControllerBase
     {
       return BadRequest("O formato do id é inválido");
     }
-    var result = await _vendaRepository.GetSaleByUserId(userGuid);
+    
+    var result = await _vendaRepository.GetSaleByUserId(userGuid, !HttpContext.User.IsInRole("Admin"));
     if (result == null) return NotFound("Usuário não encontrado!");
     return Ok(result);
   }

@@ -100,27 +100,48 @@ public class VendaRepository : IVendaRepository
         return new AuthResponseDto { IsSuccess = true, Message = "Venda removida com sucesso!"};
     }
 
-    public async Task<List<SaleDto>> GetSaleByUserId(Guid id)
+    public async Task<List<SaleDto>> GetSaleByUserId(Guid id, bool onlyActives)
     {
         var user = await _appDbContext.Users.FindAsync(id);
         if (user == null) return null;
-        
-        var vendas = await _appDbContext.Vendas
-            .Where(v => v.UserId == id)
-            .Select(v => new SaleDto
-            {
-                SaleId = v.Id,
-                SaleName = v.Name,
-                ProductId = v.ProductId,
-                ProductName = v.Product.Name,
-                ProductDescription = v.Product.Descricao,
-                ProductActive = v.isActive,
-                Valor = v.Valor,
-                
-            })
-            .ToListAsync();
-        
-        return vendas;
+
+        var query = _appDbContext.Vendas.Where(v => v.UserId == id);
+
+        if (onlyActives)
+        {
+            var vendas = await query
+                .Where(v => v.isActive)
+                .Select(v => new SaleDto
+                {
+                    SaleId = v.Id,
+                    SaleName = v.Name,
+                    ProductId = v.ProductId,
+                    ProductName = v.Product.Name,
+                    ProductDescription = v.Product.Descricao,
+                    ProductActive = v.isActive,
+                    Valor = v.Valor
+                })
+                .ToListAsync();
+
+            return vendas;
+        }
+        else
+        {
+            var vendas = await query
+                .Select(v => new SaleDto
+                {
+                    SaleId = v.Id,
+                    SaleName = v.Name,
+                    ProductId = v.ProductId,
+                    ProductName = v.Product.Name,
+                    ProductDescription = v.Product.Descricao,
+                    ProductActive = v.isActive,
+                    Valor = v.Valor
+                })
+                .ToListAsync();
+
+            return vendas;
+        }
     }
     
 }
