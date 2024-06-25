@@ -144,4 +144,24 @@ public class VendaRepository : IVendaRepository
         }
     }
     
+    public async Task<SaleDto> GetSaleById(Guid id)
+    {
+        var query = _appDbContext.Vendas.Where(v => v.Id == id);
+
+        var vendas = await query
+            .Select(v => new SaleDto
+            {
+                SaleId = v.Id,
+                SaleName = v.Name,
+                ProductId = v.ProductId,
+                ProductName = v.Product.Name,
+                ProductDescription = v.Product.Descricao,
+                ProductActive = v.isActive,
+                Valor = v.Valor
+            })
+            .FirstOrDefaultAsync();
+
+        return vendas;
+    }
+    
 }

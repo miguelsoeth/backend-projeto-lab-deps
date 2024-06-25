@@ -184,12 +184,8 @@ public class UserRepository : IUserRepository
         return users;
     }
 
-    public async Task<UserDetailDto> GetUserByIdAsync(string id)
+    public async Task<UserDetailDto> GetUserByIdAsync(Guid userId)
     {
-        if (!Guid.TryParse(id, out Guid userId))
-        {
-            return null;
-        }
         var user = await _appDbContext.Users.FindAsync(userId);
         if (user is null) return null;
         

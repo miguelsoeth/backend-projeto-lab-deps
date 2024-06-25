@@ -11,4 +11,5 @@ public interface IVendaRepository
     Task<AuthResponseDto> DisableSaleAsync(string id, bool isActive);
     Task<AuthResponseDto> DeleteSaleAsync(string id);
     Task<List<SaleDto>> GetSaleByUserId(Guid id, bool onlyActives);
+    Task<SaleDto> GetSaleById(Guid id);
 }

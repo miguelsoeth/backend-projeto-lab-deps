@@ -47,7 +47,7 @@ public class AccountController : ControllerBase
     
     [HttpGet("{id}")]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult> GetUserById(string id)
+    public async Task<ActionResult> GetUserById(Guid id)
     {
         var result = await _userRepository.GetUserByIdAsync(id);
         if (result == null) return NotFound(result);

@@ -10,7 +10,7 @@ public interface IUserRepository
     Task<AuthResponseDto> LoginUserAsync(LoginDto loginDto);
     Task<AuthResponseDto> EditUserAsync(string id, UserDetailDto editUserDto);
     Task<List<UserDetailDto>> GetAllUsersAsync();
-    Task<UserDetailDto> GetUserByIdAsync(string id);
+    Task<UserDetailDto> GetUserByIdAsync(Guid id);
     Task<UserDetailDto?> GetCurrentLoggedInUserAsync(HttpContext context);
     Task<AuthResponseDto> RefreshToken(TokenDto tokenDto);
 }
