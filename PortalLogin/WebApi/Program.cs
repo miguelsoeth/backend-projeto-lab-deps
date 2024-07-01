@@ -1,6 +1,10 @@
 using Application.Contract;
+using Application.Interfaces;
+using Domain.Config;
 using Infrastructure.DependencyInjection;
+using Infrastructure.Messaging;
 using Infrastructure.Repository;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 
@@ -11,6 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.InfrastructureServices(builder.Configuration);
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
+builder.Services.AddMassTransit();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -39,6 +44,8 @@ builder.Services.AddSwaggerGen(c =>
     // Especifique o endpoint do Swagger JSON
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
 });
+
+builder.Services.AddScoped<IPublisherService, PublisherService>();
 
 var app = builder.Build();
 
