@@ -4,7 +4,7 @@ namespace Application.Interfaces;
 
 public interface IPublisherService
 {
-    Task ConsultarLote(string fila, ConsultaLoteDto request);
+    Task ConsultarLote(string fila, ConsultaOnlineDto consulta);
     
     Task<ConsultaResponseDto> ConsultarOnline(string fila, ConsultaOnlineDto request);
 }

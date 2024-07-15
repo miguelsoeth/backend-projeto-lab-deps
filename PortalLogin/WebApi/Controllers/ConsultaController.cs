@@ -28,26 +28,27 @@ public class ConsultaController : ControllerBase
     }
 
     [HttpPost("online")]
-    public async Task<ActionResult<AuthResponseDto>> ConsultarOnline(ConsultaOnlineDto consultaDto)
+    public async Task<ActionResult<ConsultaResponseDto>> ConsultarOnline(ConsultaOnlineDto consultaDto)
     {
         var docValido = ValidateDocument.CpfCnpj(consultaDto.documento);
-        if (!docValido) { return BadRequest(new { IsSuccess = false, Message="Documento inválido" }); }
+        if (!docValido) { return BadRequest(new ConsultaResponseDto { Success = false, Message="Documento inválido" }); }
 
         var venda = await _vendaRepository.GetSaleById(consultaDto.venda);
-        if (venda == null) { return BadRequest(new { IsSuccess = false, Message = "Venda não encontrada" }); }
-        if (!venda.ProductActive) { return BadRequest(new { IsSuccess = false, Message = "Venda não ativa" }); }
+        if (venda == null) { return BadRequest(new ConsultaResponseDto { Success = false, Message = "Venda não encontrada" }); }
+        if (!venda.ProductActive) { return BadRequest(new ConsultaResponseDto { Success = false, Message = "Venda não ativa" }); }
 
         var userCredtis = await _creditRepository.GetCreditAsync(consultaDto.usuario);
-        if (userCredtis.Amount < venda.Valor) { return BadRequest(new { IsSuccess = false, Message = "Créditos insuficientes!" }); }
+        if (userCredtis.Amount < venda.Valor) { return BadRequest(new ConsultaResponseDto { Success = false, Message = "Créditos insuficientes!" }); }
         
         //return Ok(new { IsSuccess = true, Message="OK", obj=consultaDto });
+        consultaDto.dataCadastro = DateTime.Now;
 
         var response = await _publisherService.ConsultarOnline("teste", consultaDto);
-        return Ok(new { IsSuccess = true, Message="OK", Response=response });
+        return Ok(response);
     }
     
     [HttpPost("lote")]
-    public async Task<ActionResult<AuthResponseDto>> ConsultarLote(ConsultaLoteDto consultaDto)
+    public async Task<ActionResult<ConsultaResponseDto>> ConsultarLote(ConsultaLoteDto consultaDto)
     {
         foreach (var documento in consultaDto.documentos)
         {
@@ -66,8 +67,23 @@ public class ConsultaController : ControllerBase
         if (userCredtis.Amount < venda.Valor) { return BadRequest(new { IsSuccess = false, Message = "Créditos insuficientes!" }); }
         
         //return Ok(new { IsSuccess = true, Message="OK", obj=consultaDto });
+        int quant = consultaDto.documentos.Count;
+        string batch_id = Guid.NewGuid().ToString();
         
-        await _publisherService.ConsultarLote("teste", consultaDto);
-        return Ok(new { IsSuccess = true, Message="OK" });
+        foreach (var documento in consultaDto.documentos)
+        {
+            var consulta = new ConsultaOnlineDto
+            {
+                usuario = consultaDto.usuario,
+                venda = consultaDto.venda,
+                lote = batch_id,
+                quantidade = quant,
+                documento = documento,
+                perfil = consultaDto.perfil,
+                dataCadastro = DateTime.Now
+            };
+            _publisherService.ConsultarLote("teste", consulta);
+        }
+        return Ok(new ConsultaResponseDto { Success = true, Message="Lote enviado com sucesso!" });
     }
 }

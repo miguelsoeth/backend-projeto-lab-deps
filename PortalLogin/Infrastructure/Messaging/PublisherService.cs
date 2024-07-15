@@ -13,11 +13,11 @@ public class PublisherService : IPublisherService
         _bus = bus;
     }
 
-    public async Task ConsultarLote(string fila, ConsultaLoteDto request)
+    public async Task ConsultarLote(string fila, ConsultaOnlineDto consulta)
     {
         var uri = new Uri($"rabbitmq://localhost/{fila}");
         var endPoint = await _bus.GetSendEndpoint(uri);
-        await endPoint.Send(request);
+        await endPoint.Send(consulta);
     }
 
     public async Task<ConsultaResponseDto> ConsultarOnline(string fila, ConsultaOnlineDto request)
