@@ -37,11 +37,14 @@ public class ConsultaController : ControllerBase
         if (venda == null) { return BadRequest(new ConsultaResponseDto { Success = false, Message = "Venda não encontrada" }); }
         if (!venda.ProductActive) { return BadRequest(new ConsultaResponseDto { Success = false, Message = "Venda não ativa" }); }
 
-        var userCredtis = await _creditRepository.GetCreditAsync(consultaDto.usuario);
+        var userCredtis = await _creditRepository.GetCreditAsync(Guid.Parse(consultaDto.usuario));
         if (userCredtis.Amount < venda.Valor) { return BadRequest(new ConsultaResponseDto { Success = false, Message = "Créditos insuficientes!" }); }
+        
+        var userDetail = await _userRepository.GetUserByIdAsync(Guid.Parse(consultaDto.usuario));
         
         //return Ok(new { IsSuccess = true, Message="OK", obj=consultaDto });
         consultaDto.dataCadastro = DateTime.Now;
+        consultaDto.usuario = userDetail.Name;
 
         var response = await _publisherService.ConsultarOnline("teste", consultaDto);
         return Ok(response);
@@ -63,8 +66,10 @@ public class ConsultaController : ControllerBase
         if (venda == null) { return BadRequest(new { IsSuccess = false, Message = "Venda não encontrada" }); }
         if (!venda.ProductActive) { return BadRequest(new { IsSuccess = false, Message = "Venda não ativa" }); }
 
-        var userCredtis = await _creditRepository.GetCreditAsync(consultaDto.usuario);
+        var userCredtis = await _creditRepository.GetCreditAsync(Guid.Parse(consultaDto.usuario));
         if (userCredtis.Amount < venda.Valor) { return BadRequest(new { IsSuccess = false, Message = "Créditos insuficientes!" }); }
+
+        var userDetail = await _userRepository.GetUserByIdAsync(Guid.Parse(consultaDto.usuario));
         
         //return Ok(new { IsSuccess = true, Message="OK", obj=consultaDto });
         int quant = consultaDto.documentos.Count;
@@ -74,7 +79,7 @@ public class ConsultaController : ControllerBase
         {
             var consulta = new ConsultaOnlineDto
             {
-                usuario = consultaDto.usuario,
+                usuario = userDetail.Name,
                 venda = consultaDto.venda,
                 lote = batch_id,
                 quantidade = quant,
