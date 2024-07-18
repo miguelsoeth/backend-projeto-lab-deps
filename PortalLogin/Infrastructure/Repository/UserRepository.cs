@@ -271,9 +271,10 @@ public class UserRepository : IUserRepository
     */
     public string GenerateJwtToken(ApplicationUser user){
         var tokenHandler = new JwtSecurityTokenHandler();
-            
         var key = Encoding.ASCII
             .GetBytes(_configuration.GetSection("Jwt").GetSection("Key").Value!);
+        
+        Console.WriteLine(key.ToString());
 
         List<Claim> claims = 
         [

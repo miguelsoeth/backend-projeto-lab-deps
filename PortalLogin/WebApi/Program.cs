@@ -42,7 +42,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 
     // Especifique o endpoint do Swagger JSON
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Backend Projeto Labs", Version = "v1" });
 });
 
 builder.Services.AddScoped<IPublisherService, PublisherService>();

@@ -44,6 +44,7 @@ public class ConsultaController : ControllerBase
         
         //return Ok(new { IsSuccess = true, Message="OK", obj=consultaDto });
         consultaDto.dataCadastro = DateTime.Now;
+        consultaDto.usuarioId = consultaDto.usuario;
         consultaDto.usuario = userDetail.Name;
 
         var response = await _publisherService.ConsultarOnline("teste", consultaDto);
