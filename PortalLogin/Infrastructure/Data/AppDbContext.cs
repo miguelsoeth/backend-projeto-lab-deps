@@ -1,4 +1,5 @@
 using Domain.Entities;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data;
@@ -49,6 +50,31 @@ public class AppDbContext : DbContext
             .HasOne(v => v.Product)
             .WithMany(p => p.Vendas)
             .HasForeignKey(v => v.ProductId);
+        
+        modelBuilder.Entity<ApplicationUser>().HasData(
+            new ApplicationUser
+            {
+                Id = Guid.NewGuid(),
+                Name = "Administrador",
+                Email = "admin@mail",
+                Document = "11122233344",
+                Password = "$2a$11$EqhXhYgMJyjOCOV/syecku/WQ1z5/T/Nvso6SNogKdxdP.qd5Tqae", // Note: in a real application, passwords should be hashed
+                IsActive = true,
+                Roles = new List<string> { "Admin" },
+                RefreshToken = null,
+                RefreshTokenExpiryTime = DateTime.MinValue
+            }
+        );
+        
+        modelBuilder.Entity<Products>().HasData(
+            new Products
+            {
+                Id = Guid.NewGuid(),
+                Name = "Dados Publicos",
+                Descricao = "Consulta em dados publicos da Deps",
+                IsActive = true
+            }
+        );
 
         base.OnModelCreating(modelBuilder);
     }

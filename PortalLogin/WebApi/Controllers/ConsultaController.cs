@@ -48,6 +48,10 @@ public class ConsultaController : ControllerBase
         consultaDto.usuario = userDetail.Name;
 
         var response = await _publisherService.ConsultarOnline("teste", consultaDto);
+        if (response.Success)
+        {
+            await _creditRepository.DecreaseCreditAsync(Guid.Parse(consultaDto.usuarioId), venda.Valor);
+        }
         return Ok(response);
     }
     
@@ -68,7 +72,8 @@ public class ConsultaController : ControllerBase
         if (!venda.ProductActive) { return BadRequest(new { IsSuccess = false, Message = "Venda não ativa" }); }
 
         var userCredtis = await _creditRepository.GetCreditAsync(Guid.Parse(consultaDto.usuario));
-        if (userCredtis.Amount < venda.Valor) { return BadRequest(new { IsSuccess = false, Message = "Créditos insuficientes!" }); }
+        var valorTotal = venda.Valor * consultaDto.documentos.Count;
+        if (userCredtis.Amount < valorTotal) { return BadRequest(new { IsSuccess = false, Message = "Créditos insuficientes!" }); }
 
         var userDetail = await _userRepository.GetUserByIdAsync(Guid.Parse(consultaDto.usuario));
         
@@ -81,6 +86,7 @@ public class ConsultaController : ControllerBase
             var consulta = new ConsultaOnlineDto
             {
                 usuario = userDetail.Name,
+                usuarioId = consultaDto.usuario,
                 venda = consultaDto.venda,
                 lote = batch_id,
                 quantidade = quant,
@@ -88,8 +94,11 @@ public class ConsultaController : ControllerBase
                 perfil = consultaDto.perfil,
                 dataCadastro = DateTime.Now
             };
+            Console.WriteLine(consulta.usuarioId);
             _publisherService.ConsultarLote("teste", consulta);
-        }
+        } 
+        
+        await _creditRepository.DecreaseCreditAsync(Guid.Parse(consultaDto.usuario), valorTotal);
         return Ok(new ConsultaResponseDto { Success = true, Message="Lote enviado com sucesso!" });
     }
 }
