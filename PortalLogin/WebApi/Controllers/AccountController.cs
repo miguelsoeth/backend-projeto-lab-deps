@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
+
 [Route("api/[controller]")]
 [ApiController]
 public class AccountController : ControllerBase
@@ -26,11 +27,12 @@ public class AccountController : ControllerBase
         {
             return BadRequest(result);
         }
+
         return Ok(result);
     }
-    
+
     [HttpPost("register")]
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<AuthResponseDto>> RegisterUser(UserDetailDto registerUser)
     {
         var result = await _userRepository.RegisterUserAsync(registerUser);
@@ -44,7 +46,7 @@ public class AccountController : ControllerBase
         var result = await _userRepository.EditUserAsync(id, editUserDto);
         return Ok(result);
     }
-    
+
     [HttpGet("{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult> GetUserById(Guid id)
@@ -53,7 +55,7 @@ public class AccountController : ControllerBase
         if (result == null) return NotFound(result);
         return Ok(result);
     }
-    
+
     [HttpGet("all-users")]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<IEnumerable<UserDetailDto>>> AllUsers()
@@ -61,7 +63,7 @@ public class AccountController : ControllerBase
         var result = await _userRepository.GetAllUsersAsync();
         return Ok(result);
     }
-    
+
     [HttpGet("current-user")]
     [Authorize]
     public async Task<ActionResult<UserDetailDto>> GetCurrentUser()
@@ -69,10 +71,11 @@ public class AccountController : ControllerBase
         var result = await _userRepository.GetCurrentLoggedInUserAsync(HttpContext);
         return Ok(result);
     }
+
     [HttpPost("refresh-token")]
     public async Task<ActionResult> refreshToken(TokenDto tokenDto)
     {
-        if(!ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
@@ -82,8 +85,7 @@ public class AccountController : ControllerBase
         {
             return BadRequest(result);
         }
+
         return Ok(result);
     }
-    
-    
 }

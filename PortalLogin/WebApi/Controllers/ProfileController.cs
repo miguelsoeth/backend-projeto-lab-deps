@@ -11,7 +11,6 @@ namespace WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
 public class ProfileController : ControllerBase
 {
     private readonly IProfileRepository _profile;
@@ -28,12 +27,11 @@ public class ProfileController : ControllerBase
     public async Task<ActionResult<ProfileResponse>> CreateProfile([FromBody] ProfileDto profileDto, Guid userId)
     {
         var profileResponse = await _profile.CreateProfileAsync(userId, profileDto);
-        
-        if (profileResponse.ProfileName.IsNullOrEmpty()) 
-            return Conflict(profileResponse);
-        
-        return Ok(profileResponse);
 
+        if (profileResponse.ProfileName.IsNullOrEmpty())
+            return Conflict(profileResponse);
+
+        return Ok(profileResponse);
     }
 
     [HttpPut("edit/{id:guid}")]
@@ -44,11 +42,12 @@ public class ProfileController : ControllerBase
         {
             return BadRequest(ModelState);
         }
+
         var result = await _profile.EditProfileByIdAsync(id, editProfileDto);
-        
-        if (result.ProfileName.IsNullOrEmpty()) 
+
+        if (result.ProfileName.IsNullOrEmpty())
             return Conflict(result);
-        
+
         return Ok(result);
     }
 
@@ -57,14 +56,13 @@ public class ProfileController : ControllerBase
     public async Task<ActionResult> DeleteProfileById(Guid id)
     {
         var result = await _profile.DeleteProfileByIdAsync(id);
-        
-        if (result.ProfileName.IsNullOrEmpty()) 
-            return NotFound(result);
-        
-        return Ok(result);
 
+        if (result.ProfileName.IsNullOrEmpty())
+            return NotFound(result);
+
+        return Ok(result);
     }
-    
+
     [HttpGet("user/{userId:guid}")]
     [Authorize]
     public async Task<ActionResult> GetUserProfiles(Guid userId)

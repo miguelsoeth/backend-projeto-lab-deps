@@ -5,64 +5,70 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
+
 [Route("api/[controller]")]
 [ApiController]
 //[Authorize]
 public class SaleController : ControllerBase
 {
-  private readonly IVendaRepository _vendaRepository;
+    private readonly IVendaRepository _vendaRepository;
 
-  public SaleController(IVendaRepository vendaRepository)
-  {
-    _vendaRepository = vendaRepository;
-  }
+    public SaleController(IVendaRepository vendaRepository)
+    {
+        _vendaRepository = vendaRepository;
+    }
 
-  [HttpPost("CreateSale")]
-  public async Task<ActionResult> CreateSale(SaleDto sale)
-  {
-    var result = await _vendaRepository.CreateSaleAsync(sale);
-    if (result.IsSuccess == false)
+    [HttpPost("CreateSale")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult> CreateSale(SaleDto sale)
     {
-      return BadRequest(result);
-    }
-    return Ok(result);
-  }
+        var result = await _vendaRepository.CreateSaleAsync(sale);
+        if (result.IsSuccess == false)
+        {
+            return BadRequest(result);
+        }
 
-  [HttpPut("disable/{id}")]
-  public async Task<ActionResult> DisableSale(string id, bool isActive)
-  {
-    var result = await _vendaRepository.DisableSaleAsync(id, isActive);
-    if (result.IsSuccess == false)
-    {
-      return BadRequest(result);
+        return Ok(result);
     }
-    return Ok(result);
-  }
-    
-  [HttpDelete("delete/{id}")]
-  public async Task<ActionResult> DeleteSale(string id)
-  {
-    var result = await _vendaRepository.DeleteSaleAsync(id);
-    if (result.IsSuccess == false)
+
+    [HttpPut("disable/{id}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult> DisableSale(string id, bool isActive)
     {
-      return BadRequest(result);
+        var result = await _vendaRepository.DisableSaleAsync(id, isActive);
+        if (result.IsSuccess == false)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
     }
-    return Ok(result);
-  }
-  
-  
-  [HttpGet("GetSales")]
-  public async Task<ActionResult> GetAllSalesByIdUser(string id)
-  {
-    if (!Guid.TryParse(id, out Guid userGuid))
+
+    [HttpDelete("delete/{id}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult> DeleteSale(string id)
     {
-      return BadRequest("O formato do id é inválido");
+        var result = await _vendaRepository.DeleteSaleAsync(id);
+        if (result.IsSuccess == false)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
     }
-    
-    var result = await _vendaRepository.GetSaleByUserId(userGuid, !HttpContext.User.IsInRole("Admin"));
-    if (result == null) return NotFound("Usuário não encontrado!");
-    return Ok(result);
-  }
-  
-  
+
+
+    [HttpGet("GetSales")]
+    [Authorize]
+    public async Task<ActionResult> GetAllSalesByIdUser(string id)
+    {
+        if (!Guid.TryParse(id, out Guid userGuid))
+        {
+            return BadRequest("O formato do id é inválido");
+        }
+
+        var result = await _vendaRepository.GetSaleByUserId(userGuid, !HttpContext.User.IsInRole("Admin"));
+        if (result == null) return NotFound("Usuário não encontrado!");
+        return Ok(result);
+    }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
+
 [Route("api/[controller]")]
 [ApiController]
 //[Authorize(Roles = "Admin")]
@@ -19,6 +20,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost("CreateProduct")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> CreateProduct([FromBody] ProductDto productDto)
     {
         var response = await _productRepository.CreateProductsAsync(productDto);
@@ -26,6 +28,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut("EditProducts")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> EditProduct(Guid id, [FromBody] ProductDto productDto)
     {
         var response = await _productRepository.EditProductAsync(id, productDto);
@@ -33,6 +36,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpDelete("DeleteProducts/{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> DeleteProduct(Guid id)
     {
         var response = await _productRepository.DeleteProductAsync(id);
@@ -40,6 +44,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("GetProducts/{id}")]
+    [Authorize]
     public async Task<ActionResult> GetProductById(Guid id)
     {
         var response = await _productRepository.GetProductByIdAsync(id);
@@ -47,6 +52,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("GetProducts")]
+    [Authorize]
     public async Task<ActionResult> GetAllProducts()
     {
         var response = await _productRepository.GetAllProductsAsync();
