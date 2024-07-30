@@ -15,14 +15,14 @@ public class PublisherService : IPublisherService
 
     public async Task ConsultarLote(string fila, ConsultaOnlineDto consulta)
     {
-        var uri = new Uri($"rabbitmq://localhost/{fila}");
+        var uri = new Uri($"rabbitmq://host.docker.internal/{fila}");
         var endPoint = await _bus.GetSendEndpoint(uri);
         await endPoint.Send(consulta);
     }
 
     public async Task<ConsultaResponseDto> ConsultarOnline(string fila, ConsultaOnlineDto request)
     {
-        var uri = new Uri($"rabbitmq://localhost/{fila}");
+        var uri = new Uri($"rabbitmq://host.docker.internal/{fila}");
         var client = _bus.CreateRequestClient<ConsultaOnlineDto>(uri);
         Response<ConsultaResponseDto> response;
         try

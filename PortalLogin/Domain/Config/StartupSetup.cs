@@ -11,7 +11,7 @@ public static class StartupSetup
         {
             x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
             {
-                config.Host(new Uri("rabbitmq://localhost"), h =>
+                config.Host(new Uri("rabbitmq://host.docker.internal"), h =>
                 {
                     h.Username("rabbitmq");
                     h.Password("rabbitmq");
@@ -31,7 +31,7 @@ public static class StartupSetup
 
             x.UsingRabbitMq((context, cfg) =>
             {
-                cfg.Host(new Uri("rabbitmq://localhost"), h =>
+                cfg.Host(new Uri("rabbitmq://host.docker.internal"), h =>
                 {
                     h.Username("rabbitmq");
                     h.Password("rabbitmq");

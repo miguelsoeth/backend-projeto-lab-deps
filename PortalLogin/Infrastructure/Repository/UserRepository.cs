@@ -1,4 +1,3 @@
-
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -32,7 +31,7 @@ public class UserRepository : IUserRepository
         _configuration = configuration;
         _contextAccessor = contextAccessor;
     }
-    
+
     private async Task<ApplicationUser> FindUserByEmail(string email) =>
         await _appDbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
 
@@ -40,20 +39,22 @@ public class UserRepository : IUserRepository
     {
         var getUser = await FindUserByEmail(registerUser.Email!);
         //Verifica se o usuário já existe
-        if (getUser != null) return new AuthResponseDto
-        {
-            IsSuccess = false,
-            Message = "Usuário já existe."
-        };
+        if (getUser != null)
+            return new AuthResponseDto
+            {
+                IsSuccess = false,
+                Message = "Usuário já existe."
+            };
         //Verifica se os campos necessários não são nulos
         string? reason = null;
         if (registerUser.Password.IsNullOrEmpty()) reason = "Obrigatório preencher campo Senha!";
         if (registerUser.Name.IsNullOrEmpty()) reason = "Obrigatório preencher campo Nome!";
-        if (reason != null) return new AuthResponseDto
-        {
-            IsSuccess = false,
-            Message = reason
-        };
+        if (reason != null)
+            return new AuthResponseDto
+            {
+                IsSuccess = false,
+                Message = reason
+            };
         //Verifica de as roles estão vazias e corrige
         if (registerUser.Roles.IsNullOrEmpty())
         {
@@ -62,6 +63,7 @@ public class UserRepository : IUserRepository
                 "User"
             };
         }
+
         //Adiciona o usuário no banco de dados
         _appDbContext.Users.Add(new ApplicationUser()
         {
@@ -73,7 +75,7 @@ public class UserRepository : IUserRepository
             IsActive = true
         });
         await _appDbContext.SaveChangesAsync();
-        
+
         return new AuthResponseDto
         {
             IsSuccess = true,
@@ -85,27 +87,31 @@ public class UserRepository : IUserRepository
     {
         var getUser = await FindUserByEmail(loginDto.Email!);
 
-        if (getUser == null!) return new AuthResponseDto
-        {
-            IsSuccess = false,
-            Message = "Usuário não encontrado."
-        };
-        
-        if (getUser.IsActive == false) return new AuthResponseDto
-        {
-            IsSuccess = false,
-            Message = "Usuário desativado."
-        };
-        
+        if (getUser == null!)
+            return new AuthResponseDto
+            {
+                IsSuccess = false,
+                Message = "Usuário não encontrado."
+            };
+
+        if (getUser.IsActive == false)
+            return new AuthResponseDto
+            {
+                IsSuccess = false,
+                Message = "Usuário desativado."
+            };
+
         bool checkPassword = BCrypt.Net.BCrypt.Verify(loginDto.Password, getUser.Password);
-        if (!checkPassword) return new AuthResponseDto
-        {
-            IsSuccess = false,
-            Message = "Senha incorreta."
-        };
+        if (!checkPassword)
+            return new AuthResponseDto
+            {
+                IsSuccess = false,
+                Message = "Senha incorreta."
+            };
 
         var refreshToken = GenerateRefreshToken();
-        _ = int.TryParse(_configuration.GetSection("Jwt").GetSection("RefreshTokenValidityIn").Value!, out int RefreshTokenValidityIn);
+        _ = int.TryParse(_configuration.GetSection("Jwt").GetSection("RefreshTokenValidityIn").Value!,
+            out int RefreshTokenValidityIn);
         getUser.RefreshToken = refreshToken;
         getUser.RefreshTokenExpiryTime = DateTime.UtcNow.AddMinutes(RefreshTokenValidityIn);
         await _appDbContext.SaveChangesAsync();
@@ -127,39 +133,43 @@ public class UserRepository : IUserRepository
             {
                 IsSuccess = false,
                 Message = "Id inválido!"
-            }; 
+            };
         }
+
         //Encontra o usuário
         var user = await _appDbContext.Users.FindAsync(userId);
-        if (user == null!) return new AuthResponseDto
-        {
-            IsSuccess = false,
-            Message = "Usuário não encontrado."
-        };
+        if (user == null!)
+            return new AuthResponseDto
+            {
+                IsSuccess = false,
+                Message = "Usuário não encontrado."
+            };
         //Verifica campos e edita o usuário
         user.IsActive = editUserDto.IsActive;
         user.Roles = editUserDto.Roles;
-        
+
         if (!string.IsNullOrEmpty(editUserDto.Name)) user.Name = editUserDto.Name;
-        
+
         if (!string.IsNullOrEmpty(editUserDto.Document)) user.Document = editUserDto.Document;
-        
+
         if (!string.IsNullOrEmpty(editUserDto.Password))
         {
             editUserDto.Password = BCrypt.Net.BCrypt.HashPassword(editUserDto.Password);
             user.Password = editUserDto.Password;
         }
-        
+
         if (!string.IsNullOrEmpty(editUserDto.Email) && user.Email != editUserDto.Email)
         {
             var emailExists = await _appDbContext.Users.AnyAsync(u => u.Email == editUserDto.Email);
-            if (emailExists) return new AuthResponseDto
-            {
-                IsSuccess = false,
-                Message = "Email em uso!"
-            };
+            if (emailExists)
+                return new AuthResponseDto
+                {
+                    IsSuccess = false,
+                    Message = "Email em uso!"
+                };
             user.Email = editUserDto.Email;
         }
+
         //Insere o usuário no banco
         _appDbContext.Users.Update(user);
         await _appDbContext.SaveChangesAsync();
@@ -169,7 +179,7 @@ public class UserRepository : IUserRepository
             Message = "Usuário editado com sucesso!"
         };
     }
-    
+
     public async Task<List<UserDetailDto>> GetAllUsersAsync()
     {
         var users = await _appDbContext.Users.Select(u => new UserDetailDto
@@ -188,8 +198,9 @@ public class UserRepository : IUserRepository
     {
         var user = await _appDbContext.Users.FindAsync(userId);
         if (user is null) return null;
-        
-        return new UserDetailDto() {
+
+        return new UserDetailDto()
+        {
             Id = user.Id,
             Email = user.Email,
             Name = user.Name,
@@ -213,7 +224,7 @@ public class UserRepository : IUserRepository
         {
             var userEmail = userEmailClaim.Value;
             var userName = userNameClaim.Value;
-        
+
             // Carrega o usuário com os perfis associados
             var user = await _appDbContext.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
 
@@ -224,7 +235,8 @@ public class UserRepository : IUserRepository
                 // Serializa e desserializa o usuário para aplicar o ReferenceHandler
                 var serializedUser = JsonSerializer.Serialize(user, options);
                 var deserializedUser = JsonSerializer.Deserialize<ApplicationUser>(serializedUser, options);
-                return new UserDetailDto() {
+                return new UserDetailDto()
+                {
                     Id = deserializedUser!.Id,
                     Email = deserializedUser.Email,
                     Name = deserializedUser.Name,
@@ -237,6 +249,7 @@ public class UserRepository : IUserRepository
 
         return null;
     }
+
     /*
     public string GenerateJwtToken(ApplicationUser user)
     {
@@ -249,7 +262,7 @@ public class UserRepository : IUserRepository
             new Claim(JwtRegisteredClaimNames.Name, user.Name),
             new Claim(JwtRegisteredClaimNames.Email, user.Email)
         };
-        
+
         if (user.Roles != null)
         {
             foreach (var role in user.Roles)
@@ -269,28 +282,28 @@ public class UserRepository : IUserRepository
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
     */
-    public string GenerateJwtToken(ApplicationUser user){
+    public string GenerateJwtToken(ApplicationUser user)
+    {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII
             .GetBytes(_configuration.GetSection("Jwt").GetSection("Key").Value!);
-        
-        Console.WriteLine(key.ToString());
 
-        List<Claim> claims = 
+
+        List<Claim> claims =
         [
-            new (JwtRegisteredClaimNames.Email,user.Email??""),
-            new (JwtRegisteredClaimNames.Name,user.Name??""),
-            new (JwtRegisteredClaimNames.NameId,user.Id.ToString()),
-            new (JwtRegisteredClaimNames.Aud,
+            new(JwtRegisteredClaimNames.Email, user.Email ?? ""),
+            new(JwtRegisteredClaimNames.Name, user.Name ?? ""),
+            new(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
+            new(JwtRegisteredClaimNames.Aud,
                 _configuration.GetSection("Jwt").GetSection("Audience").Value!),
-            new (JwtRegisteredClaimNames.Iss,_configuration.GetSection("Jwt").GetSection("Issuer").Value!)
+            new(JwtRegisteredClaimNames.Iss, _configuration.GetSection("Jwt").GetSection("Issuer").Value!)
         ];
 
 
-        foreach(var role in user.Roles!)
+        foreach (var role in user.Roles!)
 
         {
-            claims.Add(new Claim(ClaimTypes.Role,role));
+            claims.Add(new Claim(ClaimTypes.Role, role));
         }
 
         var tokenDescriptor = new SecurityTokenDescriptor
@@ -303,10 +316,10 @@ public class UserRepository : IUserRepository
             )
         };
 
-        var token  = tokenHandler.CreateToken(tokenDescriptor);
+        var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
-    
+
     private string GenerateRefreshToken()
     {
         var randomNumber = new byte[32];
@@ -314,7 +327,7 @@ public class UserRepository : IUserRepository
         rng.GetBytes(randomNumber);
         return Convert.ToBase64String(randomNumber);
     }
-    
+
     private ClaimsPrincipal? GetPrincipalFromExpiredToken(string token)
     {
         var tokenParameters = new TokenValidationParameters
@@ -322,14 +335,18 @@ public class UserRepository : IUserRepository
             ValidateAudience = false,
             ValidateIssuer = false,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Jwt").GetSection("Key").Value!)),
+            IssuerSigningKey =
+                new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(_configuration.GetSection("Jwt").GetSection("Key").Value!)),
             ValidateLifetime = false
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var principal = tokenHandler.ValidateToken(token, tokenParameters, out SecurityToken securityToken);
 
-        if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+        if (securityToken is not JwtSecurityToken jwtSecurityToken ||
+            !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
+                StringComparison.InvariantCultureIgnoreCase))
             throw new SecurityTokenException("Token Inválido!");
 
         return principal;
@@ -349,15 +366,16 @@ public class UserRepository : IUserRepository
                 Message = "Solicitação de cliente inválida!"
             };
         }
-        
+
         var newJwtToken = GenerateJwtToken(user);
         var newRefreshToken = GenerateRefreshToken();
-        _ = int.TryParse(_configuration.GetSection("Jwt").GetSection("RefreshTokenValidityIn").Value!, out int RefreshTokenValidityIn);
+        _ = int.TryParse(_configuration.GetSection("Jwt").GetSection("RefreshTokenValidityIn").Value!,
+            out int RefreshTokenValidityIn);
 
         user.RefreshToken = newRefreshToken;
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddMinutes(RefreshTokenValidityIn);
 
-        await _appDbContext.SaveChangesAsync(); 
+        await _appDbContext.SaveChangesAsync();
 
         return new AuthResponseDto
         {
@@ -366,7 +384,5 @@ public class UserRepository : IUserRepository
             RefreshToken = newRefreshToken,
             Message = "Token atualizado com sucesso!"
         };
-
     }
-    
 }

@@ -122,7 +122,7 @@ public class ConsultaController : ControllerBase
                 perfil = consultaDto.perfil,
                 dataCadastro = DateTime.Now
             };
-            Console.WriteLine(consulta.usuarioId);
+
             _publisherService.ConsultarLote("fila-lote", consulta);
         }
 
